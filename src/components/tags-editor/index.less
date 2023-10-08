@@ -1,0 +1,21 @@
+.tags-editor-box {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    .tag-active {
+        @include box-backgroundColor(0.1);
+        @include box-border();
+        @include font-color();
+    }
+    .ant-tag .anticon-close {
+        font-size: 11px;
+        margin-right: -4px;
+        border: 1px solid;
+        border-radius: 50%;
+        padding: 4px;
+    }
+    .tag-empty-tip {
+        height: 40px;
+        line-height: 40px;
+    }
+}
