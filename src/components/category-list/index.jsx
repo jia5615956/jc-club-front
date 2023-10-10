@@ -246,10 +246,10 @@ export default class CategoryList extends Component {
                             }}
                             onClick={this.onChangeCategory(categoryModuleItem.primaryCategoryId)}>
                             <div className="first-category-item-title">
-                                {categoryModuleItem.levelName}
+                                {categoryModuleItem.categoryName}
                             </div>
                             <div className="first-category-item-count">
-                                {categoryModuleItem.count}道题
+                                {categoryModuleItem.count || 50}道题
                             </div>
                         </div>
                     );

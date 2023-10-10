@@ -13,5 +13,13 @@ export default defineConfig({
       '@components': path.resolve(__dirname, 'src/components')
     }
   },
-  plugins: [react()]
+  plugins: [react()],
+  server: {
+    proxy: {
+      "/subject": {
+        target: "http://117.72.14.166:3010",
+        changeOrigin: true,
+      },
+    },
+  }
 })

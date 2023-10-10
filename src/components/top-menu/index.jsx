@@ -1,14 +1,16 @@
+import { message } from 'antd';
 import React, { Component } from 'react'
+import { useLocation } from 'react-router-dom';
 import './index.less'
 // 顶部tab
 const MENULIST = [
   {
-    key: 'shareIndex',
+    key: 'questionBank',
     title: '刷题',
-    route: '/share-index',
+    route: '/question-bank',
   },
   {
-    key: 'questionBank',
+    key: 'prictiseQuestion',
     title: '练题',
     route: '/question-bank',
   },
@@ -27,16 +29,13 @@ const MENULIST = [
 
 // 顶部tab映射
 const mapMenu = {
-  '/cms-supplier/share-index': 'shareIndex',
-  '/cms-supplier/inter-list': 'interList',
-  '/cms-supplier/question-bank': 'questionBank',
-  '/cms-supplier/practice-questions': 'practiceQuestions',
+  '/question-bank': 'questionBank',
 }
 class TopMenu extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      currentKey: 'shareIndex',
+      currentKey: 'questionBank',
     }
   }
 
@@ -52,9 +51,15 @@ class TopMenu extends Component {
    * @returns
    */
   changeMenu = (item) => () => {
+    if (item.key === "questionBank") {
+      return
+    } else {
+      return message.info("敬请期待")
+    }
+
     // 打开新窗口
     if (item.isOpenNewWindow) {
-      window.open('/cms-supplier' + item.route)
+      window.open(item.route)
       return
     }
     this.setState(

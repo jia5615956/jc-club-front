@@ -1,25 +1,23 @@
-import React, { Component, Fragment } from "react";
-
+import React, { Component, Fragment, useState } from "react";
 import { Tag, Table, Pagination, Input } from "antd";
-import { filterDifficulty, gradeObject, imgObject } from "./constant";
+import { filterDifficulty, gradeObject } from "./constant";
+import { useNavigate } from "react-router-dom";
 import { splicingQuery } from "@utils";
 import "./index.less";
 const { Search } = Input;
 
 const colors = ['#ffffb8', '#f4ffb8', '#b5f5ec', '#bae0ff', '#d9f7be', '#efdbff', ' #ffd6e7', '#d6e4ff']
 
-class QuestionList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectValue: "难度",
-    };
-  }
 
-  componentDidMount() { }
+const QuestionList = (props) => {
 
 
-  RandomNumBoth = (Min, Max) => {
+  const [selectValue, setSelectValue] = useState('难度')
+  const navigate = useNavigate();
+
+
+
+  const RandomNumBoth = (Min, Max) => {
     //差值
     const Range = Max - Min;
     // 随机数
@@ -30,7 +28,7 @@ class QuestionList extends Component {
   /**
    * 题目列表
    */
-  questionColumns = [
+  const questionColumns = [
     {
       title: <div style={{ display: 'flex' }}>题目 <div className="question-count-box" style={{ marginLeft: '10px', color: 'rgba(0, 0, 0, 0.5)' }}>
         （当前
@@ -50,7 +48,7 @@ class QuestionList extends Component {
               {item?.tags?.length > 0 &&
                 item.tags.map((tagsItem, index) => {
                   return (
-                    <div className="question-info-tag" key={index} style={{ backgroundColor: colors[this.RandomNumBoth(0, 7)] }}>
+                    <div className="question-info-tag" key={index} style={{ backgroundColor: colors[RandomNumBoth(0, 7)] }}>
                       {tagsItem.name}
                     </div>
                   );
@@ -103,8 +101,7 @@ class QuestionList extends Component {
    * 选择标签
    * @param {*} id
    */
-  handleChangeSelect = (id) => {
-    console.log(id);
+  const handleChangeSelect = (id) => {
     let selectValue = "难度";
     if (id != 0) {
       filterDifficulty.forEach((item) => {
@@ -113,14 +110,8 @@ class QuestionList extends Component {
         }
       });
     }
-    this.setState(
-      {
-        selectValue,
-      },
-      () => {
-        this.props.handleChangeSelect(id);
-      }
-    );
+    setSelectValue(selectValue)
+    props.handleChangeSelect(id);
   };
 
   /**
@@ -129,25 +120,25 @@ class QuestionList extends Component {
    * @param {*} type
    * @returns
    */
-  onChangeAction = (item, index) => () => {
+  const onChangeAction = (item, index) => () => {
     let { isNotToDetail, difficulty, primaryCategoryId, labelList, pageIndex } =
-      this.props;
-    !isNotToDetail &&
-      this.props.history.push(
-        splicingQuery("/brush-questions", {
-          id: item?.id,
-          index: index + (pageIndex - 1) * 10 + 1,
-          difficulty,
-          primaryCategoryId,
-          labelList,
-        })
-      );
+      props;
+    !isNotToDetail && navigate("/brush-question")
+    // this.props.history.push(
+    //   splicingQuery("/brush-questions", {
+    //     id: item?.id,
+    //     index: index + (pageIndex - 1) * 10 + 1,
+    //     difficulty,
+    //     primaryCategoryId,
+    //     labelList,
+    //   })
+    // );
     if (!isNotToDetail) return;
-    this.toChangeSelectRows(item);
+    toChangeSelectRows(item);
   };
 
-  toChangeSelectRows = (record) => {
-    let newSelectedRows = [...this.props.selectRows];
+  const toChangeSelectRows = (record) => {
+    let newSelectedRows = [...props.selectRows];
     const isHas = newSelectedRows.some((rowItem) => rowItem.id === record.id);
     if (isHas) {
       newSelectedRows = newSelectedRows.filter(
@@ -156,59 +147,19 @@ class QuestionList extends Component {
     } else {
       newSelectedRows.push(record);
     }
-    this.props.setSelectRows(newSelectedRows);
+    props.setSelectRows(newSelectedRows);
   };
 
-  onChangePagination = (e) => {
-    this.props.onChangePagination(e);
+  const onChangePagination = (e) => {
+    props.onChangePagination(e);
   };
-
-  render() {
-    const { questionList, total, pageIndex, isHideSelect, isMultiple } =
-      this.props;
-    return (
-      <Fragment>
-        <div className="question-list-filter">
-          {!isHideSelect && this.renderFilterContainer()}
-          <div className="question-list-container">
-            <Table
-              onRow={(record, index) => {
-                return {
-                  onClick: this.onChangeAction(record, index), // 点击行
-                };
-              }}
-              columns={this.questionColumns}
-              dataSource={questionList}
-              rowKey={(record) => record.id}
-              // bordered={false}
-              pagination={false}
-              rowClassName="question-table-row"
-            />
-            {total > 10 && (
-              <Pagination
-                style={{
-                  padding: "24px 0",
-                  textAlign: "center",
-                }}
-                showQuickJumper
-                defaultCurrent={pageIndex}
-                total={total}
-                onChange={this.onChangePagination}
-              />
-            )}
-          </div>
-        </div>
-      </Fragment>
-    );
-  }
 
   /**
    * 过滤框-搜索框-模块
    * @returns
    */
-  renderFilterContainer = () => {
-    const { selectValue } = this.state;
-    const { total, isShowSearch, setSearchStr } = this.props;
+  const renderFilterContainer = () => {
+    const { total, isShowSearch, setSearchStr } = props;
     return (
       <div className="question-filter-container">
         {isShowSearch && (
@@ -223,6 +174,46 @@ class QuestionList extends Component {
       </div>
     );
   };
+
+  const { questionList, total, pageIndex, isHideSelect, isMultiple } =
+    props;
+
+  return (
+    <Fragment>
+      <div className="question-list-filter">
+        {!isHideSelect && renderFilterContainer()}
+        <div className="question-list-container">
+          <Table
+            onRow={(record, index) => {
+              return {
+                onClick: onChangeAction(record, index), // 点击行
+              };
+            }}
+            columns={questionColumns}
+            dataSource={questionList}
+            rowKey={(record) => record.id}
+            // bordered={false}
+            pagination={false}
+            rowClassName="question-table-row"
+          />
+          {total > 10 && (
+            <Pagination
+              style={{
+                padding: "24px 0",
+                textAlign: "center",
+              }}
+              showQuickJumper
+              defaultCurrent={pageIndex}
+              total={total}
+              onChange={onChangePagination}
+            />
+          )}
+        </div>
+      </div>
+    </Fragment>
+  );
+
+
 }
 
 

@@ -3,6 +3,7 @@ import { Popover, Spin } from 'antd';
 import { debounce } from '@utils';
 import { imgObject, RankingTypeText, RankingTypeBtnText } from '../../constant';
 import './index.less';
+import { message } from 'antd';
 
 const rankingBackImg = {
     0: imgObject.ranking1Img,
@@ -17,6 +18,8 @@ export default function RankingBox(props) {
             props.onHandleRanking && props.onHandleRanking(type);
         });
     const onJump = debounce(() => {
+        message.destroy()
+        return message.info('敬请期待')
         props.onHandleJump && props.onHandleJump();
     });
     return (

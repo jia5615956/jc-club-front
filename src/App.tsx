@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import './App.less';
-import { Routes, Route, Link } from "react-router-dom"
-import req from '@utils/request.ts';
+import { Outlet } from "react-router-dom"
 import PubSub from 'pubsub-js';
 import { Input } from 'antd';
-import QuestionBank from './views/question-bank';
-import UploadQuestions from './views/upload-questions';
 import Logo from '@views/imgs/logo.jpg'
 import Head from '@views/imgs/head.jpg'
 import TopMenu from '@components/top-menu'
@@ -25,22 +22,7 @@ class NavTop extends Component {
   timerRef = React.createRef();
 
   componentDidMount() {
-    // req({
-    //   method: 'post',
-    //   url: 'admin/interview/peo/getDirectorInfo',
-    // }).then((re) => {
-    //   this.setState(
-    //     {
-    //       userName: re.data?.name ?? '',
-    //       intervieweEamil: re.data?.email ?? '',
-    //       headImg: '',
-    //     },
-    //     () => {
-    //       window.localStorage.setItem('interviewerName', re.data?.name ?? 'XXX');
-    //       window.localStorage.setItem('intervieweEamil', re.data?.email ?? 'XXX');
-    //     }
-    //   );
-    // });
+
     PubSub.subscribe('handleToRender', () => {
       this.setState({});
     });
@@ -88,25 +70,12 @@ class NavTop extends Component {
     );
   }
 }
-class RouteExample extends Component {
-  render() {
-    return (
-      <>
-        <NavTop />
-        <Routes>
-          <Route path="/question-bank" element={<QuestionBank />}></Route>
-          <Route path="/upload-questions" element={<UploadQuestions />}></Route>
-        </Routes>
-      </>
-
-    );
-  }
-}
 export default class App extends Component {
   render() {
     return (
       <div className="app-main">
-        <RouteExample />
+        <NavTop />
+        <Outlet />
       </div>
     );
   }

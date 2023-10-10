@@ -57,19 +57,15 @@ export const filterDifficulty = [
 
 export const apiName = {
     /**
-     * 获取一级分类
+     * 查询分类
      */
-    getPrimaryCategoryInfo: '/admin/question/category/getPrimaryCategoryInfo',
+    queryPrimaryCategory: '/category/queryPrimaryCategory',
 
     /**
-     * 获取题目列表
+     * 查询大类下分类
      */
-    getInterviewSubjectList: '/admin/question/subject/getSubjectList',
+    queryCategoryByPrimary: '/category/queryCategoryByPrimary',
 
-    /**
-     * 获得贡献榜
-     */
-    getContributeList: '/admin/question/subject/getContributeList',
 };
 
 export const imgObject = {
