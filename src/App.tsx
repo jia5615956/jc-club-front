@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import './App.less';
-import { Outlet } from "react-router-dom"
+import { useLocation, useNavigate, Outlet } from 'react-router-dom';
 import PubSub from 'pubsub-js';
 import { Input } from 'antd';
 import Logo from '@views/imgs/logo.jpg'
@@ -70,13 +70,21 @@ class NavTop extends Component {
     );
   }
 }
-export default class App extends Component {
-  render() {
-    return (
-      <div className="app-main">
-        <NavTop />
-        <Outlet />
-      </div>
-    );
-  }
+
+const App = () => {
+  const location = useLocation();
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (location.pathname === '/') {
+      navigate('/question-bank')
+    }
+  }, [location])
+  return (
+    <div className="app-main">
+      <NavTop />
+      <Outlet />
+    </div>
+  )
 }
+
+export default App

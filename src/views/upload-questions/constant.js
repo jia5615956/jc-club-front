@@ -36,24 +36,24 @@ export const ModuleType = {
 export const starList = [
     {
         categoryId: 1,
-        categoryName: 'T4',
+        categoryName: '初级',
         active: true,
     },
     {
         categoryId: 2,
-        categoryName: 'T5',
+        categoryName: '中级',
     },
     {
         categoryId: 3,
-        categoryName: 'T6',
+        categoryName: '高级',
     },
     {
         categoryId: 4,
-        categoryName: 'T7',
+        categoryName: '资深',
     },
     {
         categoryId: 5,
-        categoryName: 'T8',
+        categoryName: '专家',
     },
 ];
 
@@ -63,24 +63,24 @@ export const starList = [
 export const uploadLayout = [
     {
         id: 1,
-        title: '问答题',
+        title: '简答题',
         active: true,
     },
-    {
-        id: 2,
-        title: '单选题',
-        active: false,
-    },
-    {
-        id: 3,
-        title: '多选题',
-        active: false,
-    },
-    {
-        id: 4,
-        title: '判断题',
-        active: false,
-    },
+    // {
+    //     id: 2,
+    //     title: '单选题',
+    //     active: false,
+    // },
+    // {
+    //     id: 3,
+    //     title: '多选题',
+    //     active: false,
+    // },
+    // {
+    //     id: 4,
+    //     title: '判断题',
+    //     active: false,
+    // },
 ];
 
 /**

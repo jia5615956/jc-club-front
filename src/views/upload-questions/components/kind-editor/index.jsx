@@ -50,6 +50,7 @@ export default class KindEditor extends Component {
     componentDidMount() {
         const elemMenu = this.refs.editorElemMenu;
         const elemBody = this.refs.editorElemBody;
+        if (this.editor) return
         this.editor = new Editor(elemMenu, elemBody);
         // // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
         this.editor.config.onchange = (html) => {

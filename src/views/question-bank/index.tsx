@@ -24,7 +24,7 @@ const QuestionBank = () => {
 
 
     /**
-     * 获取一级分类数据
+     * 获取大类分类
      */
     const getPrimaryCategoryInfo = () => {
         setIsShowSpin(true)
@@ -35,15 +35,33 @@ const QuestionBank = () => {
         })
             .then((res: Record<string, any>) => {
                 if (res.data && res.data.length > 0) {
-                    setPromaryCategoryId(res.data[0].primaryCategoryId);
+                    setPromaryCategoryId(res.data[0].id);
                     setFirstCategoryList(res.data)
-                    setIsShowSpin(false)
-                } else {
-                    setIsShowSpin(false)
                 }
             })
-            .catch((err: string) => console.log(err));
+            .catch((err: string) => {
+                console.log(err)
+            }).finally(() => {
+                setIsShowSpin(false)
+            })
     }
+
+    // 获取大类下分类
+    const getCategoryByPrimary = () => {
+        req({
+            method: 'post',
+            url: apiName.queryCategoryByPrimary,
+            data: { categoryType: 1, parentId: 1 }
+        }).then(res => {
+            console.log(res)
+        })
+    }
+
+    useEffect(() => {
+        if (primaryCategoryId) {
+            getCategoryByPrimary()
+        }
+    }, [primaryCategoryId])
 
     /**
     * 切换一级分类
