@@ -8,23 +8,23 @@ export const filterDifficulty = [
     },
     {
         id: 1,
-        title: 'T4',
+        title: '初级',
     },
     {
         id: 2,
-        title: 'T5',
+        title: '中级',
     },
     {
         id: 3,
-        title: 'T6',
+        title: '高级',
     },
     {
         id: 4,
-        title: 'T7',
+        title: '资深',
     },
     {
         id: 5,
-        title: 'T8',
+        title: '专家',
     },
 ];
 
@@ -33,6 +33,14 @@ export const apiName = {
      * 获取二级和三级标签
      */
     getCategoryLabelInfo: '/admin/question/category/getCategoryLabelInfo',
+
+    /**
+     * 查询大类下分类
+     */
+    queryCategoryByPrimary: '/category/queryCategoryByPrimary',
+
+    // 根据分类查标签
+    queryLabelByCategoryId: '/label/queryLabelByCategoryId'
 };
 
 export const imgObject = {

@@ -1,11 +1,19 @@
-import React, { Component } from 'react';
+import React, { Component, useRef } from 'react';
 import './index.less';
 
 import Editor from 'wangeditor';
 
+const defaultValueHead = `<div style='font-size:14px !important;line-height:22px !important;margin-bottom: -15px !important;word-break: break-word  !important;'>`;
+const defaultValueFoot = '</div>';
+
+// const KindEditor = () => {
+//     const menuRef = useRef()
+//     const bodyRef = useRef()
+//     const editor = new Editor()
+
+// }
+
 export default class KindEditor extends Component {
-    defaultValueHead = `<div style='font-size:14px !important;line-height:22px !important;margin-bottom: -15px !important;word-break: break-word  !important;'>`;
-    defaultValueFoot = '</div>';
     editor = Editor;
 
     constructor(props) {

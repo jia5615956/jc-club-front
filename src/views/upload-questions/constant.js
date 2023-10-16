@@ -3,9 +3,9 @@
  */
 export const apiName = {
     /**
-     * 获取一级/二级分类
+     * 获取一级
      */
-    getInterviewCategory: '/admin/question/category/getCategory',
+    queryPrimaryCategory: '/subject/category/queryPrimaryCategory',
 
     /**
      * 获取三级分类标签

@@ -1,6 +1,6 @@
 import { message } from 'antd';
-import React, { Component } from 'react'
-import { useLocation } from 'react-router-dom';
+import React, { Component, useState, memo } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom';
 import './index.less'
 // 顶部tab
 const MENULIST = [
@@ -12,7 +12,7 @@ const MENULIST = [
   {
     key: 'prictiseQuestion',
     title: '练题',
-    route: '/question-bank',
+    route: '/brush-question',
   },
   {
     key: 'practiceQuestions',
@@ -31,66 +31,43 @@ const MENULIST = [
 const mapMenu = {
   '/question-bank': 'questionBank',
 }
-class TopMenu extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      currentKey: 'questionBank',
-    }
-  }
 
-  componentDidMount() {
-    // this.setState({
-    //   currentKey: mapMenu[this.props.currentRoute] || '',
-    // })
-  }
+const TopMenu = () => {
+
+  const [currentKey, setCurrentKey] = useState('questionBank')
+  const location = useLocation()
+  const navigate = useNavigate()
 
   /**
    * 切换item
    * @param {*} item
    * @returns
    */
-  changeMenu = (item) => () => {
+  const changeMenu = (item) => () => {
     if (item.key === "questionBank") {
-      return
+      if (location.pathname === '/question-bank') return
+      navigate('/question-bank')
     } else {
       return message.info("敬请期待")
     }
-
-    // 打开新窗口
-    if (item.isOpenNewWindow) {
-      window.open(item.route)
-      return
-    }
-    this.setState(
-      {
-        currentKey: item.key,
-      },
-      () => {
-        this.props.history.push(item.route)
-      }
-    )
   }
 
-  render() {
-    const { currentKey } = this.state
-    return (
-      <div className="top-menu-list">
-        {MENULIST.map((item, index) => {
-          return (
-            <div
-              className={`top-menu-item ${currentKey === item.key ? 'top-menu-item-active' : ''}`}
-              key={item.key + index}
-              onClick={this.changeMenu(item)}
-            >
-              <div className="top-menu-text">{item.title}</div>
-              <div className={`top-menu-line ${currentKey === item.key ? 'top-menu-line-active' : ''}`}></div>
-            </div>
-          )
-        })}
-      </div>
-    )
-  }
+  return (
+    <div className="top-menu-list">
+      {MENULIST.map((item, index) => {
+        return (
+          <div
+            className={`top-menu-item ${currentKey === item.key ? 'top-menu-item-active' : ''}`}
+            key={item.key + index}
+            onClick={changeMenu(item)}
+          >
+            <div className="top-menu-text">{item.title}</div>
+            <div className={`top-menu-line ${currentKey === item.key ? 'top-menu-line-active' : ''}`}></div>
+          </div>
+        )
+      })}
+    </div>
+  )
 }
 
-export default TopMenu
+export default memo(TopMenu)
