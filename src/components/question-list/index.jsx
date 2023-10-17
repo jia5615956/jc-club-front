@@ -32,7 +32,7 @@ const QuestionList = (props) => {
     {
       title: <div style={{ display: 'flex' }}>题目 <div className="question-count-box" style={{ marginLeft: '10px', color: 'rgba(0, 0, 0, 0.5)' }}>
         （当前
-        <span style={{ color: "rgba(0, 0, 0, 0.65)" }}> {100} </span>
+        <span style={{ color: "rgba(0, 0, 0, 0.65)" }}> {props.total || 0} </span>
         道题）
       </div></div>,
       key: "questionNo",

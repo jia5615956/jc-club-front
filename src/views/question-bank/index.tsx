@@ -79,7 +79,6 @@ const QuestionBank = () => {
             url: apiName.getSubjectPage,
             data: params
         }).then(res => {
-            console.log(res)
             setTotal(res.data.total)
             setQuestionList(res.data.result)
         })
