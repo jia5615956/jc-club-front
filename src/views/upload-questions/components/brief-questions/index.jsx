@@ -308,12 +308,12 @@ export default class BriefQuestions extends Component {
                     </div>
                     <div className="brief-questions-container">
                         <div className="brief-questions-title">题目答案：</div>
-                        {this.reanderAnser()}
+                        {/* {this.reanderAnser()} */}
                     </div>
                     <RankLabelBox
-                        ref={(ref) => {
-                            this.rankLabelBox = ref;
-                        }}
+                        // ref={(ref) => {
+                        //     this.rankLabelBox = ref;
+                        // }}
                         subjectName={subjectName}
                         onChangeRankLabel={this.onChangeRankLabel}
                         handleChangeRank={this.handleChangeRank}

@@ -5,7 +5,10 @@ export const apiName = {
     /**
      * 获取一级
      */
-    queryPrimaryCategory: '/subject/category/queryPrimaryCategory',
+    queryPrimaryCategory: '/category/queryPrimaryCategory',
+
+    // 根据一级分类查询二级及标签
+    queryLabelByCategoryId: '/label/queryLabelByCategoryId',
 
     /**
      * 获取三级分类标签

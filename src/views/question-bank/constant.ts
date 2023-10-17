@@ -66,6 +66,9 @@ export const apiName = {
      */
     queryCategoryByPrimary: '/category/queryCategoryByPrimary',
 
+    // 获取题目列表
+    getSubjectPage: '/getSubjectPage'
+
 };
 
 export const imgObject = {

@@ -37,11 +37,11 @@ const QuestionList = (props) => {
       </div></div>,
       key: "questionNo",
       align: "centlefter",
-      render: (item) => {
+      render: (item, record) => {
         return (
           <div className="question-info-container">
             <div className="question-info-desc">
-              {item.questionTitle}
+              {record.subjectName}
 
             </div>
             <div className="question-info-tags">
@@ -60,8 +60,8 @@ const QuestionList = (props) => {
     },
     {
       title: "难度",
-      dataIndex: "grade",
-      key: "grade",
+      dataIndex: "subjectDifficult",
+      key: "subjectDifficult",
       align: "center",
       filters: [
         {

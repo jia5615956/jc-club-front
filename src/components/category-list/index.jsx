@@ -137,9 +137,29 @@ const CategoryList = ({ primaryCategoryId, categoryList, ...props }) => {
      * @returns
      */
     const onChangeLabel = (secondCategoryIndex, thirdCategoryIndex, active) => () => {
+        const { isMultipleChoice } = props;
         const list = _.cloneDeep(secondCategoryList)
-        _.set(list, [secondCategoryIndex, 'children', thirdCategoryIndex, 'active'], !active)
-        setSecondCategoryList(list)
+        if (isMultipleChoice) {
+            // 三级标签支持多选
+            _.set(list, [secondCategoryIndex, 'children', thirdCategoryIndex, 'active'], !active)
+            setSecondCategoryList(list)
+        } else {
+            // 三级标签支持单选
+            let formatLabelList = list[secondCategoryIndex].children.map((item, index) => {
+                let flag = false;
+                if (index === thirdCategoryIndex) {
+                    flag = !active; // 将三级标签设置选中/未选中
+                }
+                return {
+                    ...item,
+                    active: flag,
+                };
+            });
+            _.set(list, [secondCategoryIndex, 'children'], formatLabelList);
+            setSecondCategoryList(list)
+        }
+        // console.log(currentActive, _.get(list, [secondCategoryIndex, 'children', thirdCategoryIndex, 'id']))
+        props.onChangeLabel(_.get(list, [secondCategoryIndex, 'id']), _.get(list, [secondCategoryIndex, 'children', thirdCategoryIndex, 'id']))
     };
 
     /**
@@ -148,23 +168,15 @@ const CategoryList = ({ primaryCategoryId, categoryList, ...props }) => {
     * @returns
     */
     const onChangeOpenStatus = (secondCategoryIndex, isOpen) => () => {
-        return
-        let { secondCategoryList } = this.state;
         _.set(secondCategoryList, [secondCategoryIndex, 'isOpen'], !isOpen);
-        this.setState({
-            secondCategoryList,
-        });
+        setSecondCategoryList(secondCategoryList)
     };
 
     /**
      * 展开/收起
      */
     const onChangePutAway = () => {
-        return
-        let { isPutAway } = this.state;
-        this.setState({
-            isPutAway: !isPutAway,
-        });
+        setIsPutAway(!isPutAway)
     };
 
     /**
@@ -211,31 +223,33 @@ const CategoryList = ({ primaryCategoryId, categoryList, ...props }) => {
                                                                 thirdCategoryIndex,
                                                                 (thirdCategoryItem.active || false)
                                                             )}>
-                                                            {thirdCategoryItem.labelName}·
-                                                            {thirdCategoryItem.subjectCount || 0}
+                                                            {thirdCategoryItem.labelName}
                                                         </div>
                                                     );
                                                 }
                                             )}
                                         </div>
-                                        <div
-                                            id={`second_id_${secondCategoryIndex}`}
-                                            className="second-category-item-status"
-                                            onClick={onChangeOpenStatus(
-                                                secondCategoryIndex,
-                                                secondCategoryItem.isOpen
-                                            )}>
-                                            <div className="second-category-item-type" style={{ fontSize: 12 }}>
-                                                {secondCategoryItem.isOpen ? '收起' : '展开'}
-                                            </div>
-                                            <div className="second-category-item-icon" style={{ fontSize: 12 }}>
-                                                {secondCategoryItem.isOpen ? (
-                                                    <UpOutlined />
-                                                ) : (
-                                                    <DownOutlined />
-                                                )}
-                                            </div>
-                                        </div>
+                                        {
+                                            secondCategoryItem.children.length > 5 ? <div
+                                                id={`second_id_${secondCategoryIndex}`}
+                                                className="second-category-item-status"
+                                                onClick={onChangeOpenStatus(
+                                                    secondCategoryIndex,
+                                                    secondCategoryItem.isOpen
+                                                )}>
+                                                <div className="second-category-item-type" style={{ fontSize: 12 }}>
+                                                    {secondCategoryItem.isOpen ? '收起' : '展开'}
+                                                </div>
+                                                <div className="second-category-item-icon" style={{ fontSize: 12 }}>
+                                                    {secondCategoryItem.isOpen ? (
+                                                        <UpOutlined />
+                                                    ) : (
+                                                        <DownOutlined />
+                                                    )}
+                                                </div>
+                                            </div> : null
+                                        }
+
                                     </div>
                                 )}
                             </div>
@@ -248,6 +262,7 @@ const CategoryList = ({ primaryCategoryId, categoryList, ...props }) => {
                             style={{
                                 marginTop: 10,
                                 fontSize: 13,
+                                cursor: 'pointer'
                             }}>
                             {isPutAway ? '展开' : '收起'}
                             {isPutAway ? (
@@ -405,7 +420,7 @@ class CategoryList1 extends Component {
         if (isMultipleChoice) {
             // 三级标签支持多选
             _.set(childrenLevelList, [thirdCategoryIndex, 'active'], !active);
-            _.set(secondCategoryList, [secondCategoryIndex, 'labelInfoList'], childrenLevelList);
+            _.set(secondCategoryList, [secondCategoryIndex, 'children'], childrenLevelList);
         } else {
             // 三级标签支持单选
             let formatLabelList = childrenLevelList.map((item, index) => {
@@ -418,7 +433,7 @@ class CategoryList1 extends Component {
                     active: flag,
                 };
             });
-            _.set(secondCategoryList, [secondCategoryIndex, 'labelInfoList'], formatLabelList);
+            _.set(secondCategoryList, [secondCategoryIndex, 'children'], formatLabelList);
         }
         this.setState(
             {
@@ -427,7 +442,7 @@ class CategoryList1 extends Component {
             () => {
                 let activeList = [];
                 secondCategoryList.forEach((categoryItem) => {
-                    categoryItem.labelInfoList.forEach((item) => {
+                    categoryItem.children.forEach((item) => {
                         if (item.active) {
                             activeList.push(item.assembleId);
                         }
@@ -545,8 +560,7 @@ class CategoryList1 extends Component {
                                                             thirdCategoryIndex,
                                                             thirdCategoryItem.active
                                                         )}>
-                                                        {thirdCategoryItem.labelName}·
-                                                        {thirdCategoryItem.subjectCount}
+                                                        {thirdCategoryItem.labelName}
                                                     </div>
                                                 );
                                             }

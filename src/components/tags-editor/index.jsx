@@ -207,7 +207,7 @@ export default class TagsEditor extends Component {
         let labelList = [];
         list.forEach((item) => {
             if (item.active) {
-                labelList.push(item.categoryId);
+                labelList.push(item.id);
             }
         });
         return labelList;
@@ -242,10 +242,10 @@ export default class TagsEditor extends Component {
                                     backgroundColor: '#fff',
                                     cursor: 'pointer',
                                 }}
-                                key={item.categoryId}
+                                key={item.id}
                                 // 支持删除标签
                                 closable={item.isShowClose && isDeleteTag}
-                                className={`tags-editor-item ${item.active && 'tag-active'}`}
+                                className={`tags-editor-item ${item.active ? 'tag-active' : ''}`}
                                 onClick={this.onChangeLabel(index, item.active)}
                                 onClose={() => this.handleClose(index, item.categoryId)}>
                                 {isLongTag
@@ -254,7 +254,7 @@ export default class TagsEditor extends Component {
                             </Tag>
                         );
                         return isLongTag ? (
-                            <Tooltip title={item.categoryName} key={item.categoryId}>
+                            <Tooltip title={item.categoryName} key={item.id}>
                                 {tagElem}
                             </Tooltip>
                         ) : (

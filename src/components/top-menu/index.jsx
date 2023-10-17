@@ -23,7 +23,6 @@ const MENULIST = [
     key: 'interList',
     title: '模拟面试',
     route: '/inter-list',
-    // isOpenNewWindow: true,
   },
 ]
 

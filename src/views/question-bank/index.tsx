@@ -15,10 +15,10 @@ const QuestionBank = () => {
     const [firstCategoryList, setFirstCategoryList] = useState([])
     const [questionList, setQuestionList] = useState([])
     const [isShowSpin, setIsShowSpin] = useState(false)
-    const [labelList, setLabelList] = useState<string[]>([]); // 选中的标签列表
+    const [labelList, setLabelList] = useState<string | number>(); // 选中的标签列表
     const [difficulty, setDiffculty] = useState(0); //困难度（全部）
     const [total, setTotal] = useState(0); // 总条数
-    const [pageIndex, setPageIndex] = useState(1);
+    const [pageIndex, setPageIndex] = useState(0);
     const [primaryCategoryId, setPromaryCategoryId] = useState(''); //第一个大类id
 
 
@@ -50,7 +50,7 @@ const QuestionBank = () => {
     * @param {*} e
     */
     const onChangeCategory = (item: Record<string, any>) => {
-        setLabelList([])
+        setLabelList('')
         setPromaryCategoryId(item.id)
         setPageIndex(1)
     };
@@ -60,17 +60,43 @@ const QuestionBank = () => {
     * @param {*} primaryCategoryId 一级分类id
     * @param {*} assembleIds 三级标签 assembleIds
     */
-    const onChangeLabel = (primaryCategoryId: string, assembleIds: string[]) => {
+    const onChangeLabel = (primaryCategory: any, assembleIds: string) => {
+        setPromaryCategoryId(primaryCategory)
         setLabelList(assembleIds)
-        setPromaryCategoryId(primaryCategoryId)
         setPageIndex(1)
     };
+
+    const queryQuestionList = () => {
+        const params = {
+            pageNo: pageIndex,
+            pageSize: 10,
+            labelId: labelList,
+            categoryId: primaryCategoryId,
+            subjectDifficult: 1
+        }
+        req({
+            method: 'post',
+            url: apiName.getSubjectPage,
+            data: params
+        }).then(res => {
+            console.log(res)
+            setTotal(res.data.total)
+            setQuestionList(res.data.result)
+        })
+    }
 
     useEffect(() => {
         if (!primaryCategoryId) {
             getPrimaryCategoryInfo()
         }
     }, [])
+
+    useEffect(() => {
+        if (labelList && primaryCategoryId) {
+            queryQuestionList()
+        }
+    }, [labelList, primaryCategoryId, pageIndex])
+
 
     return (
         <div className="question-bank-box">
@@ -83,6 +109,7 @@ const QuestionBank = () => {
                                 categoryList={firstCategoryList}
                                 onChangeLabel={onChangeLabel}
                                 primaryCategoryId={primaryCategoryId}
+                                isMultipleChoice={false}
                             />
                         )}
                     </div>

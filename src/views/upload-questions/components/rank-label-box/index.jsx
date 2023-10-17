@@ -1,9 +1,170 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, useState, useEffect } from 'react';
 import req from '@utils/request';
 import TagsEditor from '@components/tags-editor';
 import { apiName, ModuleType, starList } from '../../constant';
 import './index.less';
-export default class RankLabelBox extends Component {
+
+
+const RankLabelBox = (props) => {
+
+    const [rankList, setRankList] = useState(starList)
+    const [firstCategoryList, setFirstCategoryList] = useState([])
+    const [firstSelected, setFirstSelected] = useState(null)
+    const [secondCategoryList, setSecondCategoryList] = useState([])
+
+    /**
+     * 获得一级分类数据
+     */
+    const geFirstCategoryList = () => {
+        const params = { categoryType: 1 };
+        req({
+            method: 'post',
+            data: params,
+            url: apiName.queryPrimaryCategory,
+        })
+            .then((res) => {
+                console.log(res)
+                const list = res.data.map((item, index) => {
+                    return {
+                        ...item,
+                        active: index == 0 ? true : false,
+                    };
+                });
+                setFirstCategoryList(list)
+                setFirstSelected(list[0].id)
+            })
+            .catch((err) => console.log(err));
+    }
+
+    useEffect(() => {
+        geFirstCategoryList()
+    }, [])
+
+    /**
+    * 选择职级-单选
+    * @param {*} handleStatusList
+    * @param {*} selectList
+    */
+    const onHandleChangeRank = (handleStatusList, selectList) => {
+        // console.log(handleStatusList, selectList)
+        setRankList(handleStatusList)
+        // this.props.handleChangeRank(selectList);
+    };
+
+    /**
+     * 职级选择
+     * @param {*} rankList
+     * @returns
+     */
+    const rendeRrankModule = () => {
+        return (
+            <div className="upload-single-container">
+                <div className="upload-single-title">职级选择：</div>
+                <div className="upload-single-main">
+                    <TagsEditor
+                        categoryList={rankList}
+                        isSingleChoice={true}
+                        onChangeLabel={onHandleChangeRank}
+                        isDisabledReverseSelection={true}
+                    />
+                    {/* <span style={{ marginLeft: '8px', color: 'red' }}>
+                        注：所选职级应为熟练掌握该题的最低职级
+                    </span> */}
+                </div>
+            </div>
+        );
+    };
+
+    /**
+     * 选择一级分类-单选
+     * @param {*} handleStatusList 带有是否选中状态的原数组
+     * @param {*} selectList 选中id的数组
+     */
+    const onChangeFirst = (handleStatusList, selectList) => {
+        setFirstCategoryList(handleStatusList)
+        setFirstSelected(selectList[0])
+    };
+
+    /**
+     * 获得二级分类数据
+     * @param {*} id 一级分类id
+     */
+    const getSecondCategoryList = (id) => {
+        const params = { categoryId: id };
+        req({
+            method: 'post',
+            data: params,
+            url: apiName.queryLabelByCategoryId,
+        })
+            .then((res) => {
+                setSecondCategoryList(res.data)
+                // this.firstCategoryValue = id;
+                // this.secondCategoryValue = [];
+                // this.thirdCategoryValue = [];
+                // if (res.data && res.data.length > 0) {
+                //     this.setState({
+                //         secondCategoryList: res.data,
+                //     });
+                // } else {
+                //     // 若需要新增时，则需要将数组第一个item，重置如下
+                //     this.setState({
+                //         secondCategoryList: [{ categoryName: '空', categoryId: -9999 }],
+                //     });
+                // }
+            })
+            .catch((err) => console.log(err));
+    }
+
+    useEffect(() => {
+        if (firstSelected) {
+            getSecondCategoryList(firstSelected);
+        }
+
+    }, [firstSelected])
+
+    /**
+     * 一级分类选择
+     * @param {*} firstCategoryList
+     * @returns
+     */
+    const renderFirstModule = (firstCategoryList) => {
+        return (
+            <Fragment>
+                {firstCategoryList?.length > 0 && (
+                    <div className="upload-single-container">
+                        <div className="upload-single-title">一级分类：</div>
+                        <div className="upload-single-main">
+                            <TagsEditor
+                                categoryList={firstCategoryList}
+                                isSingleChoice={true}
+                                onChangeLabel={onChangeFirst}
+                                isDisabledReverseSelection={true}
+                            />
+                        </div>
+                    </div>
+                )}
+            </Fragment>
+        );
+    };
+
+    return (
+        <Fragment>
+            {rendeRrankModule()}
+            {renderFirstModule(firstCategoryList)}
+            {/* {secondCategoryList?.length > 0 && (
+                <Fragment>
+                    {this.renderSecondModule(secondCategoryList)}
+                    {thirdCategoryList?.length > 0 && this.renderThirdModule(thirdCategoryList)}
+                </Fragment>
+            )} */}
+        </Fragment>
+    )
+}
+
+export default RankLabelBox
+
+
+class RankLabelBox1 extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -234,21 +395,7 @@ export default class RankLabelBox extends Component {
         );
     };
 
-    render() {
-        const { firstCategoryList, secondCategoryList, thirdCategoryList, rankList } = this.state;
-        return (
-            <Fragment>
-                {this.rendeRrankModule(rankList)}
-                {this.renderFirstModule(firstCategoryList)}
-                {secondCategoryList?.length > 0 && (
-                    <Fragment>
-                        {this.renderSecondModule(secondCategoryList)}
-                        {thirdCategoryList?.length > 0 && this.renderThirdModule(thirdCategoryList)}
-                    </Fragment>
-                )}
-            </Fragment>
-        );
-    }
+
 
     /**
      * 职级选择
@@ -346,5 +493,21 @@ export default class RankLabelBox extends Component {
             </div>
         );
     };
+
+    render() {
+        const { firstCategoryList, secondCategoryList, thirdCategoryList, rankList } = this.state;
+        return (
+            <Fragment>
+                {this.rendeRrankModule(rankList)}
+                {this.renderFirstModule(firstCategoryList)}
+                {secondCategoryList?.length > 0 && (
+                    <Fragment>
+                        {this.renderSecondModule(secondCategoryList)}
+                        {thirdCategoryList?.length > 0 && this.renderThirdModule(thirdCategoryList)}
+                    </Fragment>
+                )}
+            </Fragment>
+        );
+    }
 }
 
