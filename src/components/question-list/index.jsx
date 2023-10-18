@@ -192,11 +192,10 @@ const QuestionList = (props) => {
             columns={questionColumns}
             dataSource={questionList}
             rowKey={(record) => record.id}
-            // bordered={false}
             pagination={false}
             rowClassName="question-table-row"
           />
-          {total > 10 && (
+          {/* {total > 10 && (
             <Pagination
               style={{
                 padding: "24px 0",
@@ -207,7 +206,7 @@ const QuestionList = (props) => {
               total={total}
               onChange={onChangePagination}
             />
-          )}
+          )} */}
         </div>
       </div>
     </Fragment>

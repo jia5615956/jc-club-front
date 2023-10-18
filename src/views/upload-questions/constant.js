@@ -7,13 +7,13 @@ export const apiName = {
      */
     queryPrimaryCategory: '/category/queryPrimaryCategory',
 
-    // 根据一级分类查询二级及标签
+
+    // 查询二级分类
+    queryCategoryByPrimary: 'category/queryCategoryByPrimary',
+
+    // 根据一级分类查询标签
     queryLabelByCategoryId: '/label/queryLabelByCategoryId',
 
-    /**
-     * 获取三级分类标签
-     */
-    getRecommendLabel: '/admin/question/label/getRecommendLabel',
     /**
      * 新增题目
      */

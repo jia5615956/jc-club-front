@@ -11,6 +11,7 @@ const RankLabelBox = (props) => {
     const [firstCategoryList, setFirstCategoryList] = useState([])
     const [firstSelected, setFirstSelected] = useState(null)
     const [secondCategoryList, setSecondCategoryList] = useState([])
+    const [thirdCategoryList, setThirdCategoryList] = useState([])
 
     /**
      * 获得一级分类数据
@@ -23,11 +24,10 @@ const RankLabelBox = (props) => {
             url: apiName.queryPrimaryCategory,
         })
             .then((res) => {
-                console.log(res)
                 const list = res.data.map((item, index) => {
                     return {
                         ...item,
-                        active: index == 0 ? true : false,
+                        active: index == 0,
                     };
                 });
                 setFirstCategoryList(list)
@@ -46,9 +46,8 @@ const RankLabelBox = (props) => {
     * @param {*} selectList
     */
     const onHandleChangeRank = (handleStatusList, selectList) => {
-        // console.log(handleStatusList, selectList)
         setRankList(handleStatusList)
-        // this.props.handleChangeRank(selectList);
+        props.handleChangeRank(selectList);
     };
 
     /**
@@ -75,14 +74,22 @@ const RankLabelBox = (props) => {
         );
     };
 
+    const listType = {
+        1: setFirstCategoryList,
+        2: setSecondCategoryList,
+        3: setThirdCategoryList
+    }
+
     /**
      * 选择一级分类-单选
      * @param {*} handleStatusList 带有是否选中状态的原数组
      * @param {*} selectList 选中id的数组
      */
-    const onChangeFirst = (handleStatusList, selectList) => {
-        setFirstCategoryList(handleStatusList)
-        setFirstSelected(selectList[0])
+    const onChangeTags = (handleStatusList, selectList, type) => {
+        listType[type](handleStatusList)
+        if (type == 1) {
+            setFirstSelected(selectList[0])
+        }
     };
 
     /**
@@ -90,36 +97,43 @@ const RankLabelBox = (props) => {
      * @param {*} id 一级分类id
      */
     const getSecondCategoryList = (id) => {
+        const params = { categoryType: 2, parentId: id };
+        req({
+            method: 'post',
+            data: params,
+            url: apiName.queryCategoryByPrimary,
+        }).then((res) => {
+            setSecondCategoryList(res.data)
+        }).catch((err) => console.log(err));
+    }
+
+    /**
+    * 获得标签数据
+    * @param {*} id 一级分类id
+    */
+    const getLabelList = (id) => {
         const params = { categoryId: id };
         req({
             method: 'post',
             data: params,
             url: apiName.queryLabelByCategoryId,
-        })
-            .then((res) => {
-                setSecondCategoryList(res.data)
-                // this.firstCategoryValue = id;
-                // this.secondCategoryValue = [];
-                // this.thirdCategoryValue = [];
-                // if (res.data && res.data.length > 0) {
-                //     this.setState({
-                //         secondCategoryList: res.data,
-                //     });
-                // } else {
-                //     // 若需要新增时，则需要将数组第一个item，重置如下
-                //     this.setState({
-                //         secondCategoryList: [{ categoryName: '空', categoryId: -9999 }],
-                //     });
-                // }
-            })
-            .catch((err) => console.log(err));
+        }).then((res) => {
+            setThirdCategoryList(res.data.map(item => {
+                return {
+                    ...item,
+                    categoryName: item.labelName
+                }
+            }))
+        }).catch((err) => console.log(err));
     }
+
+
 
     useEffect(() => {
         if (firstSelected) {
             getSecondCategoryList(firstSelected);
+            getLabelList(firstSelected)
         }
-
     }, [firstSelected])
 
     /**
@@ -137,7 +151,7 @@ const RankLabelBox = (props) => {
                             <TagsEditor
                                 categoryList={firstCategoryList}
                                 isSingleChoice={true}
-                                onChangeLabel={onChangeFirst}
+                                onChangeLabel={(list, id) => onChangeTags(list, id, 1)}
                                 isDisabledReverseSelection={true}
                             />
                         </div>
@@ -147,16 +161,59 @@ const RankLabelBox = (props) => {
         );
     };
 
+    /**
+     * 二级分类选择
+     * @param {*} secondCategoryList
+     * @returns
+     */
+    const renderSecondModule = () => {
+        return (
+            <div className="upload-single-container">
+                <div className="upload-single-title">二级分类：</div>
+                <div className="upload-single-main">
+                    <TagsEditor
+                        moduleType={ModuleType.second}
+                        categoryList={secondCategoryList}
+                        isSingleChoice={false}
+                        onChangeLabel={(list, id) => onChangeTags(list, id, 2)}
+                    />
+                </div>
+            </div>
+        );
+    };
+
+
+    /**
+    * 三级标签选择
+    * @param {*} thirdCategoryList
+    * @returns
+    */
+    const renderThirdModule = () => {
+        return (
+            <div className="upload-single-container">
+                <div className="upload-single-title">三级标签：</div>
+                <div className="upload-single-main">
+                    <TagsEditor
+                        moduleType={ModuleType.third}
+                        categoryList={thirdCategoryList}
+                        isSingleChoice={false}
+                        onChangeLabel={(list, id) => onChangeTags(list, id, 3)}
+                    />
+                </div>
+            </div>
+        );
+    };
+
     return (
         <Fragment>
             {rendeRrankModule()}
             {renderFirstModule(firstCategoryList)}
-            {/* {secondCategoryList?.length > 0 && (
+            {secondCategoryList?.length > 0 ? (
                 <Fragment>
-                    {this.renderSecondModule(secondCategoryList)}
-                    {thirdCategoryList?.length > 0 && this.renderThirdModule(thirdCategoryList)}
+                    {renderSecondModule()}
+                    {thirdCategoryList?.length > 0 && renderThirdModule()}
                 </Fragment>
-            )} */}
+            ) : null}
         </Fragment>
     )
 }

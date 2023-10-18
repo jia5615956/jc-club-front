@@ -39,7 +39,7 @@ export default class BriefQuestions extends Component {
                 subjectName: str,
             },
             () => {
-                this.rankLabelBox.getThirdCategoryList();
+                // this.rankLabelBox.getThirdCategoryList();
                 let isDisabledSubmit = this.checkData();
                 this.setState({
                     isDisabledSubmit,

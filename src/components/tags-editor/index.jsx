@@ -41,7 +41,7 @@ export default class TagsEditor extends Component {
             .then((res) => {
                 if (res.data) {
                     let list = categoryList.filter((item) => {
-                        return item.categoryId !== categoryId;
+                        return item.id !== categoryId;
                     });
                     this.props.onChangeLabel(list, this.formatList(list));
                 }
@@ -220,7 +220,7 @@ export default class TagsEditor extends Component {
         // 数组中存在 -9999 表示暂无数据，需要支持新增
         if (
             categoryList.filter((item) => {
-                return item.categoryId === -9999;
+                return item.id === -9999;
             }).length > 0
         ) {
             labelList = categoryList.slice(1, categoryList.length);
@@ -229,7 +229,7 @@ export default class TagsEditor extends Component {
             <div className="tags-editor-box">
                 {labelList?.length > 0 &&
                     labelList.map((item, index) => {
-                        const isLongTag = item.categoryName.length > 20;
+                        const isLongTag = item.categoryName?.length > 20;
                         const tagElem = (
                             <Tag
                                 style={{
@@ -247,7 +247,7 @@ export default class TagsEditor extends Component {
                                 closable={item.isShowClose && isDeleteTag}
                                 className={`tags-editor-item ${item.active ? 'tag-active' : ''}`}
                                 onClick={this.onChangeLabel(index, item.active)}
-                                onClose={() => this.handleClose(index, item.categoryId)}>
+                                onClose={() => this.handleClose(index, item.id)}>
                                 {isLongTag
                                     ? `${item.categoryName.slice(0, 20)}...`
                                     : item.categoryName}

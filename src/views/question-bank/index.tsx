@@ -52,16 +52,21 @@ const QuestionBank = () => {
     const onChangeCategory = (item: Record<string, any>) => {
         setLabelList('')
         setPromaryCategoryId(item.id)
+        setQuestionList([])
         setPageIndex(1)
+        setTotal(0)
     };
+
+    const [secondCategoryId, setSecondCategoryId] = useState('')
 
     /**
     * 选择标签时，请求列表数据
     * @param {*} primaryCategoryId 一级分类id
     * @param {*} assembleIds 三级标签 assembleIds
     */
-    const onChangeLabel = (primaryCategory: any, assembleIds: string) => {
-        setPromaryCategoryId(primaryCategory)
+    const onChangeLabel = (secondCategoryId: any, assembleIds: string) => {
+        // setPromaryCategoryId(primaryCategory)
+        setSecondCategoryId(secondCategoryId)
         setLabelList(assembleIds)
         setPageIndex(1)
     };
@@ -71,7 +76,7 @@ const QuestionBank = () => {
             pageNo: pageIndex,
             pageSize: 10,
             labelId: labelList,
-            categoryId: primaryCategoryId,
+            categoryId: secondCategoryId,
             subjectDifficult: 1
         }
         req({
