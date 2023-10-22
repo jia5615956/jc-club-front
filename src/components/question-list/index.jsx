@@ -123,7 +123,7 @@ const QuestionList = (props) => {
   const onChangeAction = (item, index) => () => {
     let { isNotToDetail, difficulty, primaryCategoryId, labelList, pageIndex } =
       props;
-    !isNotToDetail && navigate("/brush-question")
+    !isNotToDetail && navigate("/brush-question/" + item.id)
     // this.props.history.push(
     //   splicingQuery("/brush-questions", {
     //     id: item?.id,
@@ -191,9 +191,10 @@ const QuestionList = (props) => {
             }}
             columns={questionColumns}
             dataSource={questionList}
-            rowKey={(record) => record.id}
+            rowKey="id"
             pagination={false}
             rowClassName="question-table-row"
+
           />
           {/* {total > 10 && (
             <Pagination

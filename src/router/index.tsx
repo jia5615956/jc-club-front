@@ -17,7 +17,7 @@ const router = createBrowserRouter([
                 element: <QuestionBank />,
             },
             {
-                path: "brush-question",
+                path: "brush-question/:id",
                 element: <BrushQuestions />,
             },
             {

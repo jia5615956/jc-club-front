@@ -7,7 +7,6 @@ import RankingList from './components/ranking-list'
 import { apiName } from './constant';
 import req from '@utils/request';
 import { Spin } from 'antd';
-import { mockDataList } from './mock';
 import './index.less';
 
 const QuestionBank = () => {
@@ -132,8 +131,8 @@ const QuestionBank = () => {
                 </div>
             </Spin>
             <div className="ranking-box">
-                <ContributionList />
                 <RankingList />
+                <ContributionList />
             </div>
         </div>
     );

@@ -1,11 +1,83 @@
 import { Pagination, Button, Modal, Input, Radio, message } from 'antd'
-import React, { Component, Fragment } from 'react'
-import { queryParse } from '@utils'
+import React, { Component, Fragment, useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import GoodCollectionError from '@components/good-collection-error'
 import './index.less'
 import req from '@utils/request'
 
-export default class BrushQuestions extends Component {
+const grade: Record<string, string> = {
+  1: '初级',
+  2: '中级',
+  3: '高级',
+  4: '资深',
+  5: '专家',
+}
+
+const BrushQuestions = () => {
+
+  const { id } = useParams()
+  const [question, setQuestion] = useState<Record<string, any>>(null)
+  const [index, setIndex] = useState(1)
+
+  useEffect(() => {
+    if (!id) return
+    req({
+      method: 'post',
+      data: {
+        id
+      },
+      url: '/querySubjectInfo',
+    })
+      .then((res) => {
+        if (res.success && res.data) {
+          setQuestion(res.data)
+        }
+      })
+      .catch((err) => console.log(err))
+  }, [id])
+
+  return (
+    <div className="brush-questions-box">
+      <div className="question-box">
+        <div className="question">
+          <div className="question-type">
+            <div className="number">{index}</div>
+            <div className="type">问答题</div>
+          </div>
+        </div>
+      </div>
+      {
+        question ? <Fragment>
+          <div className="question-content">
+            <div className="difficulty">
+              {grade[question.subjectDifficult]}-{question?.labelName.join('、')}
+            </div>
+            <div>{question.subjectName}</div>
+          </div>
+          <div className="answer-box">
+            <div className="reference-answer">参考答案</div>
+            <div
+              className="answer-content wang-editor-style"
+              dangerouslySetInnerHTML={{
+                __html: question.subjectAnswer,
+              }}
+            ></div>
+            <br />
+          </div>
+          <div className="change-question-box">
+            <GoodCollectionError
+              questionId={question.id}
+            />
+          </div>
+        </Fragment> : null
+      }
+    </div>
+  )
+}
+
+export default BrushQuestions
+
+class BrushQuestions1 extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -64,7 +136,7 @@ export default class BrushQuestions extends Component {
     return await req({
       method: 'post',
       data: params,
-      url: '/admin/question/subject/getSubjectList',
+      url: '/querySubjectInfo',
     })
       .then((res) => {
         if (res.data && res.data?.pageList?.length > 0) {
