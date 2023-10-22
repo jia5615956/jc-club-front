@@ -7,6 +7,7 @@ import KindEditor from '../kind-editor';
 import RankLabelBox from '../rank-label-box';
 import RepeatContentBox from '../repeat-content-box';
 import { apiName } from '../../constant';
+import QuestionEditor from '../question-editor'
 import './index.less';
 
 export default class BriefQuestions extends Component {
@@ -64,76 +65,78 @@ export default class BriefQuestions extends Component {
      * 一次确认录入
      */
     onSubmit = debounce(() => {
+        console.log(this.rankId)
         const { subjectName, isDisabledSubmit, isSubmit } = this.state;
         if (isDisabledSubmit || !isSubmit) {
             return;
         }
-        // if (!isSubmit) {
+        if (!isSubmit) {
+            return;
+        }
+        // if (!!!subjectName) {
+        //     message.warning('请输入题目名称');
         //     return;
         // }
-        if (!!!subjectName) {
-            message.warning('请输入题目名称');
-            return;
-        }
-        if (!!!this.subjectAnswer) {
-            message.warning('请输入题目答案');
-            return;
-        }
-        if (!!!this.firstCategoryValue) {
-            message.warning('请选择一级分类');
-            return;
-        }
-        if (this.secondCategoryValue.length <= 0) {
-            message.warning('请选择二级分类');
-            return;
-        }
-        if (this.thirdCategoryValue.length <= 0) {
-            message.warning('请选择三级标签');
-            return;
-        }
+        // if (!!!this.subjectAnswer) {
+        //     message.warning('请输入题目答案');
+        //     return;
+        // }
+        // if (!!!this.firstCategoryValue) {
+        //     message.warning('请选择一级分类');
+        //     return;
+        // }
+        // if (this.secondCategoryValue.length <= 0) {
+        //     message.warning('请选择二级分类');
+        //     return;
+        // }
+        // if (this.thirdCategoryValue.length <= 0) {
+        //     message.warning('请选择三级标签');
+        //     return;
+        // }
         this.setState({
             isSubmit: false,
         });
         let params = {
             subjectName: subjectName,
-            difficulty: this.rankId,
+            subjectDifficult: this.rankId,
             subjectType: 4,
             subjectScore: 1,
+            subjectParse: '解析什么',
             subjectAnswer: this.subjectAnswer,
-            categoryIds: this.secondCategoryValue,
-            labelIds: this.thirdCategoryValue,
+            categoryIds: this.secondCategoryValue.filter(item => item.active).map(t => t.id),
+            labelIds: [4, 5, 6],
         };
-        console.log('录入 ----', params);
+        // return console.log('录入 ----', params);
         req({
             method: 'post',
             data: params,
-            url: apiName.addInterviewSubject,
+            url: apiName.add,
         })
             .then((res) => {
                 this.repeatInfo = {};
-                if (res.data && res.data.insertStatus) {
-                    this.setState(
-                        {
-                            isSubmit: true,
-                        },
-                        () => {
-                            this.successModalConfirm();
-                        }
-                    );
-                } else if (!res.data.insertStatus) {
-                    this.repeatInfo = {
-                        repeatDocId: res.data.docId, // 重复题目id
-                        repeatRate: res.data.repeatRate, // 重复率
-                        repeatSubjectName: res.data.subjectName, // 重复题目
-                        repeatSubjectAnswe: res.data.subjectAnswer, // 重复答案
-                        repeatSetterErp: res.data.subjectSetterErp, // 出题人erp
-                        repeatSetterName: res.data.subjectSetterName, // 出题人姓名
-                    };
-                    this.setState({
-                        isShowModalBox: true,
-                        isSubmit: true,
-                    });
-                }
+                // if (res.data && res.data.insertStatus) {
+                //     this.setState(
+                //         {
+                //             isSubmit: true,
+                //         },
+                //         () => {
+                //             this.successModalConfirm();
+                //         }
+                //     );
+                // } else if (!res.data.insertStatus) {
+                //     this.repeatInfo = {
+                //         repeatDocId: res.data.docId, // 重复题目id
+                //         repeatRate: res.data.repeatRate, // 重复率
+                //         repeatSubjectName: res.data.subjectName, // 重复题目
+                //         repeatSubjectAnswe: res.data.subjectAnswer, // 重复答案
+                //         repeatSetterErp: res.data.subjectSetterErp, // 出题人erp
+                //         repeatSetterName: res.data.subjectSetterName, // 出题人姓名
+                //     };
+                //     this.setState({
+                //         isShowModalBox: true,
+                //         isSubmit: true,
+                //     });
+                // }
             })
             .catch((err) => {
                 this.setState({
@@ -154,8 +157,9 @@ export default class BriefQuestions extends Component {
             !!!subjectName ||
             !!!this.subjectAnswer ||
             !!!this.firstCategoryValue ||
-            this.secondCategoryValue.length <= 0 ||
-            this.thirdCategoryValue.length <= 0
+            this.secondCategoryValue.length <= 0
+            //  ||
+            // this.thirdCategoryValue.length <= 0
         ) {
             isDisabledSubmit = true;
         }
@@ -257,7 +261,7 @@ export default class BriefQuestions extends Component {
      * 录入成功弹框-去首页
      */
     onGoHomeSuccessModal = () => {
-        window.location.href = '/cms-supplier/question-bank';
+        window.location.href = '/question-bank';
     };
 
     /**
@@ -279,7 +283,7 @@ export default class BriefQuestions extends Component {
      * @param {*} list
      */
     handleChangeRank = (list) => {
-        this.rankId = list[0];
+        this.rankId = list[0].categoryId;
         let isDisabledSubmit = this.checkData();
         this.setState({
             isDisabledSubmit,
@@ -308,12 +312,9 @@ export default class BriefQuestions extends Component {
                     </div>
                     <div className="brief-questions-container">
                         <div className="brief-questions-title">题目答案：</div>
-                        {/* {this.reanderAnser()} */}
+                        {this.reanderAnser()}
                     </div>
                     <RankLabelBox
-                        // ref={(ref) => {
-                        //     this.rankLabelBox = ref;
-                        // }}
                         subjectName={subjectName}
                         onChangeRankLabel={this.onChangeRankLabel}
                         handleChangeRank={this.handleChangeRank}
@@ -347,11 +348,8 @@ export default class BriefQuestions extends Component {
     reanderAnser = () => {
         return (
             <div className="brief-questions-main">
-                <KindEditor
+                <QuestionEditor
                     onChange={this.onChangeEditor}
-                    ref={(ref) => {
-                        this.kindEditor = ref;
-                    }}
                 />
             </div>
         );

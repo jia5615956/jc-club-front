@@ -45,9 +45,10 @@ const RankLabelBox = (props) => {
     * @param {*} handleStatusList
     * @param {*} selectList
     */
-    const onHandleChangeRank = (handleStatusList, selectList) => {
+    const onHandleChangeRank = (handleStatusList) => {
+        // console.log(handleStatusList, selectList)
         setRankList(handleStatusList)
-        props.handleChangeRank(selectList);
+        props.handleChangeRank(handleStatusList.filter(t => t.active));
     };
 
     /**
@@ -74,6 +75,8 @@ const RankLabelBox = (props) => {
         );
     };
 
+
+
     const listType = {
         1: setFirstCategoryList,
         2: setSecondCategoryList,
@@ -90,7 +93,11 @@ const RankLabelBox = (props) => {
         if (type == 1) {
             setFirstSelected(selectList[0])
         }
-    };
+    }
+
+    useEffect(() => {
+        props.onChangeRankLabel(firstCategoryList, secondCategoryList, thirdCategoryList)
+    }, [firstCategoryList, secondCategoryList, thirdCategoryList])
 
     /**
      * 获得二级分类数据

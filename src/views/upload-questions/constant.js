@@ -14,6 +14,8 @@ export const apiName = {
     // 根据一级分类查询标签
     queryLabelByCategoryId: '/label/queryLabelByCategoryId',
 
+    // 新增简答
+    add: '/add',
     /**
      * 新增题目
      */
