@@ -1,11 +1,14 @@
-import React, { Component, Fragment, useState, useEffect } from 'react';
+import React, {
+    Component, Fragment, useState, useEffect, forwardRef,
+    useImperativeHandle,
+} from 'react';
 import req from '@utils/request';
 import TagsEditor from '@components/tags-editor';
 import { apiName, ModuleType, starList } from '../../constant';
 import './index.less';
 
 
-const RankLabelBox = (props) => {
+const RankLabelBox = (props, ref) => {
 
     const [rankList, setRankList] = useState(starList)
     const [firstCategoryList, setFirstCategoryList] = useState([])
@@ -39,6 +42,30 @@ const RankLabelBox = (props) => {
     useEffect(() => {
         geFirstCategoryList()
     }, [])
+
+    /**
+     * 初始化数据
+     */
+    const initRankLabel = () => {
+        // const [rankList, setRankList] = useState(starList)
+        // const [firstCategoryList, setFirstCategoryList] = useState([])
+        // const [firstSelected, setFirstSelected] = useState(null)
+        // const [secondCategoryList, setSecondCategoryList] = useState([])
+        // const [thirdCategoryList, setThirdCategoryList] = useState([])
+        setRankList(starList)
+        setFirstCategoryList([])
+        setFirstSelected(null)
+        setSecondCategoryList([])
+        setThirdCategoryList([])
+        setTimeout(() => {
+            geFirstCategoryList()
+        })
+    };
+
+    useImperativeHandle(ref, () => ({
+        // onCallback 就是暴露给父组件的方法
+        initRankLabel
+    }));
 
     /**
     * 选择职级-单选
@@ -225,7 +252,7 @@ const RankLabelBox = (props) => {
     )
 }
 
-export default RankLabelBox
+export default forwardRef(RankLabelBox)
 
 
 class RankLabelBox1 extends Component {

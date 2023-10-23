@@ -1,12 +1,15 @@
 import '@wangeditor/editor/dist/css/style.css' // 引入 css
 
-import React, { useState, useEffect } from 'react'
+import React, {
+    useState, useEffect, forwardRef,
+    useImperativeHandle,
+} from 'react'
 import { Editor, Toolbar } from '@wangeditor/editor-for-react'
-import { DomEditor } from '@wangeditor/editor'
+
 
 // 当前菜单排序和分组
 
-function MyEditor(props) {
+function MyEditor(props, ref) {
     // editor 实例
     const [editor, setEditor] = useState(null)
 
@@ -33,13 +36,15 @@ function MyEditor(props) {
         props.onChange(html)
     }
 
+    const onClear = () => setHtml('')
+    // 此处注意useImperativeHandle方法的的第一个参数是目标元素的ref引用
+    useImperativeHandle(ref, () => ({
+        // onCallback 就是暴露给父组件的方法
+        onClear
+    }));
+
     // 及时销毁 editor ，重要！
     useEffect(() => {
-        // if (editor) {
-        //     const toolbar = DomEditor.getToolbar(editor)
-        //     const curToolbarConfig = toolbar.getConfig()
-        //     console.log(curToolbarConfig.toolbarKeys)
-        // }
         return () => {
             if (editor == null) return
             editor.destroy()
@@ -69,4 +74,4 @@ function MyEditor(props) {
     )
 }
 
-export default MyEditor
+export default forwardRef(MyEditor)

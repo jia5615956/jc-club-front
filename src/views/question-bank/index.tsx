@@ -1,5 +1,6 @@
 // import { Component } from 'react';
 import { useState, useEffect, memo } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import QuestionList from '@components/question-list';
 import CategoryList from '@components/category-list';
 import ContributionList from './components/contribution-list';
@@ -19,7 +20,14 @@ const QuestionBank = () => {
     const [total, setTotal] = useState(0); // 总条数
     const [pageIndex, setPageIndex] = useState(0);
     const [primaryCategoryId, setPromaryCategoryId] = useState(''); //第一个大类id
+    const [secondCategoryId, setSecondCategoryId] = useState('')
 
+    let [searchParams, setSearchParams] = useSearchParams();
+    const changeUrlParam = () => {
+        // console.log(searchParams.size)
+        setSearchParams({ id: 1 })
+        // window.history.pushState({}, '0', window.location.href + '?url=' + '参数');
+    }
 
     /**
      * 获取大类分类
@@ -56,15 +64,13 @@ const QuestionBank = () => {
         setTotal(0)
     };
 
-    const [secondCategoryId, setSecondCategoryId] = useState('')
 
     /**
     * 选择标签时，请求列表数据
-    * @param {*} primaryCategoryId 一级分类id
+    * @param {*} secondCategoryId 一级分类id
     * @param {*} assembleIds 三级标签 assembleIds
     */
     const onChangeLabel = (secondCategoryId: any, assembleIds: string) => {
-        // setPromaryCategoryId(primaryCategory)
         setSecondCategoryId(secondCategoryId)
         setLabelList(assembleIds)
         setPageIndex(1)
@@ -95,10 +101,11 @@ const QuestionBank = () => {
     }, [])
 
     useEffect(() => {
-        if (labelList && primaryCategoryId) {
+        if (labelList && secondCategoryId) {
+            setSearchParams({ second: secondCategoryId, label: labelList })
             queryQuestionList()
         }
-    }, [labelList, primaryCategoryId, pageIndex])
+    }, [labelList, pageIndex, secondCategoryId])
 
 
     return (

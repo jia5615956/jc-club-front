@@ -37,6 +37,8 @@ const CategoryList = ({ primaryCategoryId, categoryList, ...props }) => {
     const [currentActive, setCurrentActive] = useState(categoryList[0])
     const [isPutAway, setIsPutAway] = useState(true)
     const [loading, setLoading] = useState(false)
+    const [currentLabelIndex, setCurrentLabelIndex] = useState([])
+
 
     const getLabels = (id) => {
         return new Promise(resolve => {
@@ -65,8 +67,13 @@ const CategoryList = ({ primaryCategoryId, categoryList, ...props }) => {
             let list = res.data
             for (let i = 0; i < list.length; i++) {
                 list[i].children = await getLabels(list[i].id)
+                if (i === 0) {
+                    list[i].children[0].active = true
+                }
             }
             setSecondCategoryList(_.cloneDeep(list))
+            setCurrentLabelIndex([0, 0])
+            props.onChangeLabel(_.get(list, [0, 'id']), _.get(list, [0, 'children', 0, 'id']))
         })
     }
 
@@ -128,7 +135,6 @@ const CategoryList = ({ primaryCategoryId, categoryList, ...props }) => {
         );
     };
 
-    const [currentLabelIndex, setCurrentLabelIndex] = useState([])
 
     /**
      * 选择标签-支持单选（多选）

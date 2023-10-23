@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, createRef } from 'react';
 import { Input, Modal, message, Spin } from 'antd';
 
 import req from '@utils/request';
@@ -20,8 +20,8 @@ export default class BriefQuestions extends Component {
             isSubmit: true, // 是否支持提交
         };
     }
-    kindEditor = KindEditor | null;
-    rankLabelBox = RankLabelBox | null;
+    kindEditor = createRef();
+    rankLabelBox = createRef();
     rankId = 1; //职级
     subjectAnswer = ''; // 答案
     firstCategoryValue = ''; // 一级分类的值
@@ -73,26 +73,26 @@ export default class BriefQuestions extends Component {
         if (!isSubmit) {
             return;
         }
-        // if (!!!subjectName) {
-        //     message.warning('请输入题目名称');
-        //     return;
-        // }
-        // if (!!!this.subjectAnswer) {
-        //     message.warning('请输入题目答案');
-        //     return;
-        // }
-        // if (!!!this.firstCategoryValue) {
-        //     message.warning('请选择一级分类');
-        //     return;
-        // }
-        // if (this.secondCategoryValue.length <= 0) {
-        //     message.warning('请选择二级分类');
-        //     return;
-        // }
-        // if (this.thirdCategoryValue.length <= 0) {
-        //     message.warning('请选择三级标签');
-        //     return;
-        // }
+        if (!!!subjectName) {
+            message.warning('请输入题目名称');
+            return;
+        }
+        if (!!!this.subjectAnswer) {
+            message.warning('请输入题目答案');
+            return;
+        }
+        if (!!!this.firstCategoryValue) {
+            message.warning('请选择一级分类');
+            return;
+        }
+        if (this.secondCategoryValue.length <= 0) {
+            message.warning('请选择二级分类');
+            return;
+        }
+        if (this.thirdCategoryValue.length <= 0) {
+            message.warning('请选择三级标签');
+            return;
+        }
         this.setState({
             isSubmit: false,
         });
@@ -104,39 +104,19 @@ export default class BriefQuestions extends Component {
             subjectParse: '解析什么',
             subjectAnswer: this.subjectAnswer,
             categoryIds: this.secondCategoryValue.filter(item => item.active).map(t => t.id),
-            labelIds: [4, 5, 6],
+            labelIds: this.thirdCategoryValue.filter(item => item.active).map(t => t.id),
         };
-        // return console.log('录入 ----', params);
         req({
             method: 'post',
             data: params,
             url: apiName.add,
         })
             .then((res) => {
-                this.repeatInfo = {};
-                // if (res.data && res.data.insertStatus) {
-                //     this.setState(
-                //         {
-                //             isSubmit: true,
-                //         },
-                //         () => {
-                //             this.successModalConfirm();
-                //         }
-                //     );
-                // } else if (!res.data.insertStatus) {
-                //     this.repeatInfo = {
-                //         repeatDocId: res.data.docId, // 重复题目id
-                //         repeatRate: res.data.repeatRate, // 重复率
-                //         repeatSubjectName: res.data.subjectName, // 重复题目
-                //         repeatSubjectAnswe: res.data.subjectAnswer, // 重复答案
-                //         repeatSetterErp: res.data.subjectSetterErp, // 出题人erp
-                //         repeatSetterName: res.data.subjectSetterName, // 出题人姓名
-                //     };
-                //     this.setState({
-                //         isShowModalBox: true,
-                //         isSubmit: true,
-                //     });
-                // }
+                this.setState({
+                    isSubmit: true,
+                }, () => {
+                    this.successModalConfirm();
+                });
             })
             .catch((err) => {
                 this.setState({
@@ -170,14 +150,15 @@ export default class BriefQuestions extends Component {
      * 取消
      */
     onCancel = () => {
+        console.log(this.kindEditor)
         this.subjectAnswer = ''; // 答案
         this.rankId = 1;
         this.firstCategoryValue = '';
         this.secondCategoryValue = [];
         this.thirdCategoryValue = [];
         this.repeatInfo = {};
-        this.kindEditor.onClear();
-        this.rankLabelBox.initRankLabel();
+        this.kindEditor.current.onClear();
+        this.rankLabelBox.current.initRankLabel();
         this.setState({
             subjectName: '',
             isShowModalBox: false,
@@ -318,6 +299,7 @@ export default class BriefQuestions extends Component {
                         subjectName={subjectName}
                         onChangeRankLabel={this.onChangeRankLabel}
                         handleChangeRank={this.handleChangeRank}
+                        ref={this.rankLabelBox}
                     />
                     <div className="brief-questions-btns-container">
                         <div className="brief-questions-btn" onClick={this.onCancel}>
@@ -350,6 +332,7 @@ export default class BriefQuestions extends Component {
             <div className="brief-questions-main">
                 <QuestionEditor
                     onChange={this.onChangeEditor}
+                    ref={this.kindEditor}
                 />
             </div>
         );
