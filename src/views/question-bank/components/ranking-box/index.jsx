@@ -1,99 +1,108 @@
-import React from 'react';
-import { Popover, Spin } from 'antd';
-import { debounce } from '@utils';
-import { imgObject, RankingTypeText, RankingTypeBtnText } from '../../constant';
-import './index.less';
-import { message } from 'antd';
+import React from 'react'
+import { Popover, Spin } from 'antd'
+import { debounce } from '@utils'
+import { imgObject, RankingTypeText, RankingTypeBtnText } from '../../constant'
+import './index.less'
 
 const rankingBackImg = {
-    0: imgObject.ranking1Img,
-    1: imgObject.ranking2Img,
-    2: imgObject.ranking3Img,
-};
+  0: imgObject.ranking1Img,
+  1: imgObject.ranking2Img,
+  2: imgObject.ranking3Img,
+}
 
 export default function RankingBox(props) {
-    const { isLoading, currentActive, rankingList, rankingType } = props;
-    const onChangeRanking = (type) =>
-        debounce(() => {
-            props.onHandleRanking && props.onHandleRanking(type);
-        });
-    const onJump = debounce(() => {
-        message.destroy()
-        return message.info('敬请期待')
-        props.onHandleJump && props.onHandleJump();
-    });
-    return (
-        <div className="ranking-list-box">
-            <div className="ranking-list-header">
-                <div className="ranking-list-title">{RankingTypeText[rankingType]}</div>
-                <div className="ranking-list-btns">
-                    <div
-                        onClick={onChangeRanking(1)}
-                        className={`ranking-list-btn ${currentActive === undefined || currentActive === 1
-                            ? 'ranking-list-btn-active'
-                            : ''
-                            }`}>
-                        本月排行
-                    </div>
-                    <div
-                        onClick={onChangeRanking(2)}
-                        className={`ranking-list-btn ${currentActive === 2 ? 'ranking-list-btn-active' : ''
-                            }`}>
-                        总排行
-                    </div>
-                </div>
-            </div>
-            <Spin spinning={isLoading}>
-                <div className="ranking-list">
-                    {rankingList?.length > 0 &&
-                        rankingList.map((item, index) => {
-                            return (
-                                <div className="ranking-item" key={item.id}>
-                                    <div className="ranking-left">
-                                        <div
-                                            className="ranking-icon"
-                                            style={{
-                                                backgroundImage: `url(${rankingBackImg[index]})`,
-                                            }}>
-                                            {index + 1}
-                                        </div>
-                                        <div className="ranking-head-img">
-                                            <img src={item.headImg} className="ranking-head-icon" />
-                                        </div>
-                                        <Popover
-                                            title={
-                                                <div>
-                                                    {item.name}
-                                                </div>
-                                            }
-                                            content={
-                                                <div className="tooltip-info">
-                                                    <div>{item.erp}</div>
-                                                    <div>{item.organizationFullName}</div>
-                                                </div>
-                                            }>
-                                            <div className="ranking-info">
-                                                <div className="ranking-name">{item.name}</div>
-                                                <div className="ranking-department">
-                                                    {item.organizationName}
-                                                </div>
-                                            </div>
-                                        </Popover>
-                                    </div>
-                                    <div className="ranking-right">🔥 {item.count}</div>
-                                </div>
-                            );
-                        })}
-                </div>
-            </Spin>
-            <div className="ranking-btn-go" onClick={onJump}>
+  const { isLoading = false, currentActive, rankingType, contributionList } = props
+  const onChangeRanking = (index) =>
+    debounce(() => {
+      props.onHandleRanking && props.onHandleRanking(index)
+    })
+  const onJump = debounce(() => {
+    props.onHandleJump && props.onHandleJump()
+  })
+  const tabList = [
+    {
+      tab: '本月排行',
+      key: 'month'
+    },
+    {
+      tab: '总榜',
+      key: 'total'
+    }
+  ]
+  // 获得当前下标的数据
+  let rankingList = contributionList || []
+
+  return (
+    <div className="ranking-list-box">
+      <div className="ranking-list-header">
+        <div className="ranking-list-title">{RankingTypeText[rankingType]}</div>
+        <div className="ranking-list-btns">
+          {tabList.length > 0 &&
+            tabList.map((item, index) => {
+              return (
                 <div
-                    className="ranking-btn-go-icon"
-                    style={{
-                        backgroundImage: `url(${imgObject.clickImg})`,
-                    }}></div>
-                <div className="ranking-btn-text">{RankingTypeBtnText[rankingType]}</div>
-            </div>
+                  key={`${rankingType}_${item.key}`}
+                  onClick={onChangeRanking(index)}
+                  className={`ranking-list-btn ${currentActive === index ? 'ranking-list-btn-active' : ''}`}
+                >
+                  {item.tab}
+                </div>
+              )
+            })}
         </div>
-    );
+      </div>
+      <Spin spinning={isLoading}>
+        <div className="ranking-list">
+          {rankingList?.length > 0 &&
+            rankingList.map((item, index) => {
+              return (
+                <div className="ranking-item" key={item.id}>
+                  <div className="ranking-left">
+                    <div
+                      className="ranking-icon"
+                      style={{
+                        backgroundImage: `url(${index <= 2 ? rankingBackImg[index] : imgObject.rankingImg})`,
+                      }}
+                    >
+                      {index > 2 && index + 1}
+                    </div>
+                    <div className="ranking-head-img">
+                      <img src={item.headImg} className="ranking-head-icon" />
+                    </div>
+                    <Popover
+                      title={
+                        <div>
+                          {item.name}
+                        </div>
+                      }
+                      content={
+                        <div className="tooltip-info">
+                          <div>{item.name}</div>
+                          {/* <div>{item.organizationFullName}</div> */}
+                        </div>
+                      }
+                    >
+                      <div className="ranking-info">
+                        <div className="ranking-name">{item.name}</div>
+                        {/* <div className="ranking-department">{item.organizationName}</div> */}
+                      </div>
+                    </Popover>
+                  </div>
+                  <div className="ranking-right">🔥 {item.count}</div>
+                </div>
+              )
+            })}
+        </div>
+      </Spin>
+      <div className="ranking-btn-go" onClick={onJump}>
+        <div
+          className="ranking-btn-go-icon"
+          style={{
+            backgroundImage: `url(${imgObject.clickImg})`,
+          }}
+        ></div>
+        <div className="ranking-btn-text">{RankingTypeBtnText[rankingType]}</div>
+      </div>
+    </div>
+  )
 }

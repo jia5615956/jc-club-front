@@ -1,32 +1,31 @@
 import React, { Fragment, Component } from 'react';
-// import { withRouter } from 'react-router-dom';
 import req from '@utils/request';
 import RankingBox from '../ranking-box';
 import { apiName, RankingType } from '../../constant';
 import { mockRankingModuleList } from '../../mock';
 
-class ContributionList extends Component {
+class PracticeList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            contributionList: mockRankingModuleList[1].rankingList || [],
+            contributionList: mockRankingModuleList[0].rankingList,
             contributeType: 0,
             isLoading: false,
         };
     }
 
     componentDidMount() {
-        // this.getContributeList();
+        // this.getPracticeRankList();
     }
 
     /**
-     * 获得贡献榜
+     * 获得练习榜
      */
-    getContributeList() {
+    getPracticeRankList() {
         req({
             method: 'post',
             data: {},
-            url: apiName.getContributeList,
+            url: apiName.getPracticeRankList,
         })
             .then((res) => {
                 if (res.data && res.data.length > 0) {
@@ -50,18 +49,17 @@ class ContributionList extends Component {
      * @returns
      */
     onChangeRanking = (index) => {
-        console.log(index, 'contribute index')
-
+        console.log(index, 'practice index')
         this.setState({
             contributeType: index,
         });
     };
 
     /**
-     * 去录题
+     * 去练题
      */
     onChangeJump = () => {
-        this.props.history.push('/upload-questions');
+        this.props.history.push('/practice-questions');
     };
 
     render() {
@@ -73,7 +71,7 @@ class ContributionList extends Component {
                         isLoading={isLoading}
                         contributionList={contributionList}
                         currentActive={contributeType}
-                        rankingType={RankingType.contribution}
+                        rankingType={RankingType.practice}
                         onHandleRanking={this.onChangeRanking}
                         onHandleJump={this.onChangeJump}
                     />
@@ -83,4 +81,4 @@ class ContributionList extends Component {
     }
 }
 
-export default ContributionList;
+export default PracticeList;

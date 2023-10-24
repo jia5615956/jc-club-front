@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom'
 import QuestionList from '@components/question-list';
 import CategoryList from '@components/category-list';
 import ContributionList from './components/contribution-list';
-import RankingList from './components/ranking-list'
+import RankingList from './components/practice-list'
 import { apiName } from './constant';
 import req from '@utils/request';
 import { Spin } from 'antd';

@@ -75,11 +75,13 @@ export const imgObject = {
     clickImg:
         'https://img13.360buyimg.com/imagetools/jfs/t1/222669/25/807/6590/617f4f06Eb2094586/64c39ce3769b8a16.png',
     ranking1Img:
-        'https://img14.360buyimg.com/imagetools/jfs/t1/206730/39/7751/986/617f4fbaE4e23097a/aa94ca31a9c132b2.png',
+        'https://img12.360buyimg.com/imagetools/jfs/t1/110906/3/22471/3750/6214a3bfE392596cf/122c9e4b30948682.png',
     ranking2Img:
-        'https://img10.360buyimg.com/imagetools/jfs/t1/156125/21/27968/948/617f4fbaEcf1da9a9/722ad0917497697a.png',
+        'https://img13.360buyimg.com/imagetools/jfs/t1/211695/8/12987/4360/6214a3bfEd4679fde/4f3c55783bb9119c.png',
     ranking3Img:
-        'https://img12.360buyimg.com/imagetools/jfs/t1/213197/17/2682/958/617f4fbbE06c277a9/03ef4c389c52ab8d.png',
+        'https://img10.360buyimg.com/imagetools/jfs/t1/175261/19/28428/4566/6214a3bfE476e1b0f/ea59084c55001c06.png',
+    rankingImg:
+        'https://img11.360buyimg.com/imagetools/jfs/t1/167264/35/27633/603/6214a3bfEf8feff1d/8d833235e6bc468d.png',
     timeline:
         'https://img13.360buyimg.com/imagetools/jfs/t1/210387/35/7564/555/617f4fbbE0cb305c1/728913d21e650794.png',
     backAllImg:
