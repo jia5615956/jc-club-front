@@ -86,7 +86,7 @@ const QuestionList = (props) => {
         },
       ],
       onFilter: (value, record) => {
-        return value === 0 ? record : record.grade === value
+        return value === 0 ? record : record.subjectDifficult === value
       },
       width: 90,
       render: (key) => {
