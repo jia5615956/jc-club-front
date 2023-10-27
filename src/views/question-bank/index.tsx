@@ -1,6 +1,6 @@
 // import { Component } from 'react';
 import { useState, useEffect, memo } from 'react'
-import { useSearchParams } from 'react-router-dom'
+// import { useSearchParams } from 'react-router-dom'
 import QuestionList from '@components/question-list';
 import CategoryList from '@components/category-list';
 import ContributionList from './components/contribution-list';
@@ -12,7 +12,7 @@ import './index.less';
 
 const QuestionBank = () => {
 
-    const [firstCategoryList, setFirstCategoryList] = useState([])
+    const [firstCategoryList, setFirstCategoryList] = useState<Record<string, any>[]>([])
     const [questionList, setQuestionList] = useState([])
     const [isShowSpin, setIsShowSpin] = useState(false)
     const [labelList, setLabelList] = useState<string | number>(); // 选中的标签列表
@@ -22,12 +22,12 @@ const QuestionBank = () => {
     const [primaryCategoryId, setPromaryCategoryId] = useState(''); //第一个大类id
     const [secondCategoryId, setSecondCategoryId] = useState('')
 
-    let [searchParams, setSearchParams] = useSearchParams();
-    const changeUrlParam = () => {
-        // console.log(searchParams.size)
-        setSearchParams({ id: 1 })
-        // window.history.pushState({}, '0', window.location.href + '?url=' + '参数');
-    }
+    // let [searchParams, setSearchParams] = useSearchParams();
+    // const changeUrlParam = () => {
+    //     // console.log(searchParams.size)
+    //     setSearchParams({ id: 1 })
+    //     // window.history.pushState({}, '0', window.location.href + '?url=' + '参数');
+    // }
 
     /**
      * 获取大类分类
@@ -102,11 +102,23 @@ const QuestionBank = () => {
 
     useEffect(() => {
         if (labelList && secondCategoryId) {
-            setSearchParams({ second: secondCategoryId, label: labelList })
+            // setSearchParams({ second: secondCategoryId, label: labelList })
             queryQuestionList()
         }
     }, [labelList, pageIndex, secondCategoryId])
 
+    /**
+   * 更多分类切换
+   * @param {*} e
+   */
+    const onChangeCategoryMore = (id: string, categoryList: Record<string, any>[]) => {
+        setFirstCategoryList(categoryList)
+        setPromaryCategoryId(id)
+        setLabelList('')
+        setQuestionList([])
+        setPageIndex(1)
+        setTotal(0)
+    }
 
     return (
         <div className="question-bank-box">
@@ -120,6 +132,7 @@ const QuestionBank = () => {
                                 onChangeLabel={onChangeLabel}
                                 primaryCategoryId={primaryCategoryId}
                                 isMultipleChoice={false}
+                                onChangeCategoryMore={onChangeCategoryMore}
                             />
                         )}
                     </div>

@@ -8,7 +8,7 @@ import {
     CaretUpOutlined,
 } from '@ant-design/icons';
 import req from '@utils/request';
-import { Divider, Spin } from 'antd';
+import { Divider, Spin, Modal } from 'antd';
 import _ from 'lodash';
 import './index.less';
 import { apiName, imgObject } from './constant';
@@ -32,12 +32,25 @@ const categoryShowCount = 4;
 
 const cacheMap = {}
 
+/**
+     * 上万后展示 W+
+     * @param {*} total
+     * @returns
+     */
+const formatTotal = (total) => {
+    if (total >= 10000) {
+        return Math.floor(total / 10000) + 'W+';
+    }
+    return total;
+}
+
 const CategoryList = ({ primaryCategoryId, categoryList, ...props }) => {
     const [secondCategoryList, setSecondCategoryList] = useState([])
     const [currentActive, setCurrentActive] = useState(categoryList[0])
     const [isPutAway, setIsPutAway] = useState(true)
     const [loading, setLoading] = useState(false)
     const [currentLabelIndex, setCurrentLabelIndex] = useState([])
+    const [openMoreFlag, setOpenMoreFlag] = useState(false)
 
 
     const getLabels = (id) => {
@@ -126,7 +139,7 @@ const CategoryList = ({ primaryCategoryId, categoryList, ...props }) => {
                     );
                 })}
                 {categoryList.length > 7 && (
-                    <div className="first-category-more">
+                    <div className="first-category-more" onClick={() => setOpenMoreFlag(true)}>
                         更多
                         <RightOutlined />
                     </div>
@@ -135,6 +148,57 @@ const CategoryList = ({ primaryCategoryId, categoryList, ...props }) => {
         );
     };
 
+
+    /**
+     * 点击更多的分类项
+     * @param {*} id
+     * @returns
+     */
+    const onChangeCategoryMore = (cur) => () => {
+        setOpenMoreFlag(false)
+        setCurrentActive(cur)
+        let list = [...categoryList].reduce((pre, item) => {
+            if (item.id !== cur.id) {
+                pre.push(item);
+            } else {
+                pre.unshift(item);
+            }
+            return pre;
+        }, []);
+        props.onChangeCategoryMore && props.onChangeCategoryMore(cur.id, list);
+    };
+
+    /**
+     * 更多分类
+     * @returns
+     */
+    const renderMoreBox = () => {
+        return (
+            <div className="first-category-more-list">
+                {categoryList.slice(7).map((categoryModuleItem, categoryModuleIndex) => {
+                    return (
+                        <div
+                            className="first-category-item"
+                            key={`first_more_category_${categoryModuleItem.id}`}
+                            style={{
+                                backgroundImage: `url(${categoryBackImg[categoryModuleIndex]})`,
+                            }}
+                            onClick={onChangeCategoryMore(
+                                categoryModuleItem
+                            )}
+                        >
+                            <div className="first-category-item-title">
+                                {categoryModuleItem.categoryName}
+                            </div>
+                            <div className="first-category-item-count">
+                                {formatTotal(categoryModuleItem.subjectCount)}道题
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    };
 
     /**
      * 选择标签-支持单选（多选）
@@ -291,6 +355,14 @@ const CategoryList = ({ primaryCategoryId, categoryList, ...props }) => {
                     {secondCategoryList?.length > 0 && this.renderSecondContainer()}
                 </Fragment>
             )} */}
+            <Modal
+                open={openMoreFlag}
+                footer={null}
+                closable={true}
+                centered
+                onCancel={() => setOpenMoreFlag(false)}>
+                {renderMoreBox()}
+            </Modal>
         </div>
     )
 }

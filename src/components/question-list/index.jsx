@@ -45,11 +45,11 @@ const QuestionList = (props) => {
 
             </div>
             <div className="question-info-tags">
-              {item?.tags?.length > 0 &&
-                item.tags.map((tagsItem, index) => {
+              {item?.labelName?.length > 0 &&
+                item.labelName.map((tagsItem) => {
                   return (
-                    <div className="question-info-tag" key={index} style={{ backgroundColor: colors[RandomNumBoth(0, 7)] }}>
-                      {tagsItem.name}
+                    <div className="question-info-tag" key={tagsItem} style={{ backgroundColor: colors[RandomNumBoth(0, 7)] }}>
+                      {tagsItem}
                     </div>
                   );
                 })}

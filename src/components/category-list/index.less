@@ -1,6 +1,7 @@
 .category-box {
     .first-category-list {
         display: flex;
+        width: 100%;
         .first-category-item {
             flex-shrink: 1;
             display: inline-flex;
@@ -16,30 +17,30 @@
             background-color: rgba(0, 0, 0, 0.04);
             font-weight: 400;
             transition: all 0.5s;
-            .first-category-item-title {
+            &-title {
                 color: #ffffff;
                 font-size: 14px;
                 text-overflow: ellipsis;
                 -webkit-line-clamp: 1;
                 overflow: hidden;
-                /* autoprefixer: off */
                 -webkit-box-orient: vertical;
                 display: -webkit-box;
                 word-wrap: break-word;
                 word-break: break-all;
             }
-            .first-category-item-count {
+            &-count {
                 font-size: 12px;
                 color: rgba(255, 255, 255, 0.65);
                 line-height: 16px;
+                word-wrap: break-word;
             }
             &:hover {
                 transition: all 0.5s;
                 transform: translateY(-8px);
             }
-        }
-        .first-category-item-active {
-            transform: translateY(-8px);
+            &-active {
+                transform: translateY(-8px);
+            }
         }
         .first-category-more {
             display: flex;
@@ -140,3 +141,60 @@
         }
     }
 }
+
+.ant-modal-content {
+        width: 606px;
+        background-color: #fff;
+        .ant-modal-body {
+            padding: 24px;
+            .first-category-more-list {
+                display: flex;
+                flex-wrap: wrap;
+                width: 100%;
+                .first-category-item {
+                    flex-shrink: 1;
+                    display: inline-flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    margin: 10px 8px;
+                    padding: 10px 12px;
+                    width: 120px;
+                    height: 76px;
+                    cursor: pointer;
+                    border-radius: 4px;
+                    background-size: 100% 100%;
+                    background-color: rgba(0, 0, 0, 0.04);
+                    font-weight: 400;
+                    transition: all 0.5s;
+                    &-title {
+                        color: #ffffff;
+                        font-size: 14px;
+                        text-overflow: ellipsis;
+                        -webkit-line-clamp: 1;
+                        overflow: hidden;
+                        /* autoprefixer: off */
+                        -webkit-box-orient: vertical;
+                        display: -webkit-box;
+                        word-wrap: break-word;
+                        word-break: break-all;
+                    }
+                    &-count {
+                        font-size: 12px;
+                        color: rgba(255, 255, 255, 0.65);
+                        line-height: 16px;
+                        word-wrap: break-word;
+                    }
+                    &:hover {
+                        transition: all 0.5s;
+                        transform: translateY(-8px);
+                    }
+                    &-active {
+                        transform: translateY(-8px);
+                    }
+                    &:nth-child(4n) {
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+    }
