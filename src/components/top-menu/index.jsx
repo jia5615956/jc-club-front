@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import React, { Component, useState, memo } from 'react'
+import React, { useState, memo, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import './index.less'
 // 顶部tab
@@ -37,6 +37,16 @@ const TopMenu = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
+  useEffect(() => {
+    const cur = MENULIST.filter(t => t.route === location.pathname)
+    if (cur.length) {
+      setCurrentKey(cur[0].key)
+    } else {
+      setCurrentKey('')
+    }
+  }, [location.pathname]);
+
+
   /**
    * 切换item
    * @param {*} item
@@ -46,6 +56,7 @@ const TopMenu = () => {
     if (item.key === "questionBank") {
       if (location.pathname === '/question-bank') return
       navigate('/question-bank')
+      setCurrentKey(item.key)
     } else {
       return message.info("敬请期待")
     }

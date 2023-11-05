@@ -80,7 +80,7 @@ const CategoryList = ({ primaryCategoryId, categoryList, ...props }) => {
             let list = res.data
             for (let i = 0; i < list.length; i++) {
                 list[i].children = await getLabels(list[i].id)
-                if (i === 0) {
+                if (i === 0 && list[i].children.length) {
                     list[i].children[0].active = true
                 }
             }

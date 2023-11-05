@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { message } from 'antd';
+import { message, Modal } from 'antd';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const baseHttp = () => {
     const http = axios.create({
@@ -15,6 +16,8 @@ export const baseHttp = () => {
 };
 
 export default function request(config, url) {
+    // const navigate = useNavigate()
+
     const baseURL = url || '/subject';
     // 1.创建axios的实例
     const instance = axios.create({
@@ -50,6 +53,7 @@ export default function request(config, url) {
             let { status } = err?.response ?? {};
             if (status === 401 || !status) {
                 message.info('页面异常')
+                window.location.replace('/login')
             } else if (status === 500 || status === 503) {
                 message.error('服务器错误');
             }

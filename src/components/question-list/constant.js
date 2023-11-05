@@ -65,8 +65,8 @@ export const imgObject = {
         'https://img11.360buyimg.com/imagetools/jfs/t1/206213/24/13307/2603/617f4fc4E676d448d/622d5287fbf5a919.png',
     dataImg:
         'https://img12.360buyimg.com/imagetools/jfs/t1/207558/34/7606/3672/617f4fc4E1ca685fc/3953a92a6072fba4.png',
-    javaImg:
-        '../../views/imgs/javaImg.png',
+    // javaImg:
+    // '../../views/imgs/javaImg.png',
     npmImg: 'https://img11.360buyimg.com/imagetools/jfs/t1/200551/24/15367/3145/617f4fc4Ea153dc2e/b4bbf2de8807f42d.png',
     parallelComputingImg:
         'https://img14.360buyimg.com/imagetools/jfs/t1/207198/23/7638/3037/617f4fc4E0e20ab9d/40197a6c79c5a33f.png',

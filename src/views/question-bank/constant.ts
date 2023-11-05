@@ -1,4 +1,4 @@
-import JavaImg from '@views/imgs/javaImg.png'
+// import JavaImg from '@views/imgs/javaImg.png'
 /**
  * 难度等级
  */
@@ -73,7 +73,7 @@ export const apiName = {
 
 export const imgObject = {
     clickImg:
-        'https://img13.360buyimg.com/imagetools/jfs/t1/222669/25/807/6590/617f4f06Eb2094586/64c39ce3769b8a16.png',
+        'http://117.72.14.166:9000/jichi/icon/%E7%83%AD%E9%97%A8.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin%2F20231102%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20231102T153146Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=e6b8cdb3231b1c3d7114212cb9278ecc17cf6d4ec0f759ea0200e04156d4c8b7',
     ranking1Img:
         'https://img12.360buyimg.com/imagetools/jfs/t1/110906/3/22471/3750/6214a3bfE392596cf/122c9e4b30948682.png',
     ranking2Img:
@@ -88,7 +88,7 @@ export const imgObject = {
         'https://img11.360buyimg.com/imagetools/jfs/t1/206213/24/13307/2603/617f4fc4E676d448d/622d5287fbf5a919.png',
     dataImg:
         'https://img12.360buyimg.com/imagetools/jfs/t1/207558/34/7606/3672/617f4fc4E1ca685fc/3953a92a6072fba4.png',
-    javaImg: JavaImg,
+    // javaImg: JavaImg,
     npmImg: 'https://img11.360buyimg.com/imagetools/jfs/t1/200551/24/15367/3145/617f4fc4Ea153dc2e/b4bbf2de8807f42d.png',
     parallelComputingImg:
         'https://img14.360buyimg.com/imagetools/jfs/t1/207198/23/7638/3037/617f4fc4E0e20ab9d/40197a6c79c5a33f.png',
