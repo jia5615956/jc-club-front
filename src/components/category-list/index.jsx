@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 
 import {
     RightOutlined,
@@ -11,7 +11,8 @@ import req from '@utils/request';
 import { Divider, Spin, Modal } from 'antd';
 import _ from 'lodash';
 import './index.less';
-import { apiName, imgObject } from './constant';
+import { apiName } from './constant';
+import { imgObject } from '@constants'
 
 /**
  * 大分类中的背景图

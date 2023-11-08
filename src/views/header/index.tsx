@@ -3,6 +3,7 @@ import Logo from '@/imgs/logo.jpg'
 import Head from '@/imgs/head.jpg'
 import TopMenu from '@components/top-menu'
 import { UserOutlined, HeartOutlined, LikeOutlined, LoginOutlined } from '@ant-design/icons'
+import { useNavigate } from "react-router-dom";
 
 const { Search } = Input;
 
@@ -33,13 +34,14 @@ const menuItems = [
 
 const Header = () => {
 	const { pathname } = window.location;
-
+	const navigate = useNavigate()
 
 	const handleMenuClick = e => {
 		console.log(e)
 		if (e.key != 1) {
 			return message.info('敬请期待')
 		}
+		navigate('/user-info')
 	}
 
 	return (

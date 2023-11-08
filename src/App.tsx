@@ -12,9 +12,9 @@ const App = () => {
     }
   }, [location])
   return (
-    <div className="app-main">
+    <div className="app-main" style={{ padding: location.pathname === '/login' ? '66px 0 0' : '66px 16px 32px' }}>
       <Header />
-      <div className='content-box'>
+      <div className='content-box' style={{ width: location.pathname === '/login' ? '100%' : '1439px' }}>
         <Outlet />
       </div>
     </div>

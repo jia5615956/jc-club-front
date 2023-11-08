@@ -1,8 +1,7 @@
-import React, { Component, Fragment, useState } from "react";
-import { Tag, Table, Pagination, Input } from "antd";
-import { filterDifficulty, gradeObject } from "./constant";
+import React, { Fragment, useState } from "react";
+import { Tag, Table, Input } from "antd";
+import { filterDifficulty, gradeObject } from "@constants";
 import { useNavigate } from "react-router-dom";
-import { splicingQuery } from "@utils";
 import "./index.less";
 const { Search } = Input;
 

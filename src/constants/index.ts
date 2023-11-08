@@ -1,4 +1,34 @@
 /**
+ * 难度筛选
+ */
+export const filterDifficulty = [
+    {
+        id: 0,
+        title: '全部',
+    },
+    {
+        id: 1,
+        title: '初级',
+    },
+    {
+        id: 2,
+        title: '中级',
+    },
+    {
+        id: 3,
+        title: '高级',
+    },
+    {
+        id: 4,
+        title: '资深',
+    },
+    {
+        id: 5,
+        title: '专家',
+    },
+];
+
+/**
  * 难度等级
  */
 export const gradeObject = {
@@ -24,49 +54,24 @@ export const gradeObject = {
     },
 };
 
-/**
- * 难度筛选
- */
-export const filterDifficulty = [
-    {
-        id: 0,
-        title: '全部',
-    },
-    {
-        id: 2,
-        title: '初级',
-    },
-    {
-        id: 3,
-        title: '中级',
-    },
-    {
-        id: 4,
-        title: '高级',
-    },
-    {
-        id: 5,
-        title: '资深',
-    },
-];
-
 export const imgObject = {
     clickImg:
-        'https://img13.360buyimg.com/imagetools/jfs/t1/222669/25/807/6590/617f4f06Eb2094586/64c39ce3769b8a16.png',
+        'http://117.72.14.166:9000/jichi/icon/%E7%83%AD%E9%97%A8.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin%2F20231102%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20231102T153146Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=e6b8cdb3231b1c3d7114212cb9278ecc17cf6d4ec0f759ea0200e04156d4c8b7',
     ranking1Img:
-        'https://img14.360buyimg.com/imagetools/jfs/t1/206730/39/7751/986/617f4fbaE4e23097a/aa94ca31a9c132b2.png',
+        'https://img12.360buyimg.com/imagetools/jfs/t1/110906/3/22471/3750/6214a3bfE392596cf/122c9e4b30948682.png',
     ranking2Img:
-        'https://img10.360buyimg.com/imagetools/jfs/t1/156125/21/27968/948/617f4fbaEcf1da9a9/722ad0917497697a.png',
+        'https://img13.360buyimg.com/imagetools/jfs/t1/211695/8/12987/4360/6214a3bfEd4679fde/4f3c55783bb9119c.png',
     ranking3Img:
-        'https://img12.360buyimg.com/imagetools/jfs/t1/213197/17/2682/958/617f4fbbE06c277a9/03ef4c389c52ab8d.png',
+        'https://img10.360buyimg.com/imagetools/jfs/t1/175261/19/28428/4566/6214a3bfE476e1b0f/ea59084c55001c06.png',
+    rankingImg:
+        'https://img11.360buyimg.com/imagetools/jfs/t1/167264/35/27633/603/6214a3bfEf8feff1d/8d833235e6bc468d.png',
     timeline:
         'https://img13.360buyimg.com/imagetools/jfs/t1/210387/35/7564/555/617f4fbbE0cb305c1/728913d21e650794.png',
     backAllImg:
         'https://img11.360buyimg.com/imagetools/jfs/t1/206213/24/13307/2603/617f4fc4E676d448d/622d5287fbf5a919.png',
     dataImg:
         'https://img12.360buyimg.com/imagetools/jfs/t1/207558/34/7606/3672/617f4fc4E1ca685fc/3953a92a6072fba4.png',
-    // javaImg:
-    // '../../views/imgs/javaImg.png',
+    javaImg: 'https://img14.360buyimg.com/imagetools/jfs/t1/213752/24/2703/4803/617f4fc4E037da291/5f8050641d4d73d2.png',
     npmImg: 'https://img11.360buyimg.com/imagetools/jfs/t1/200551/24/15367/3145/617f4fc4Ea153dc2e/b4bbf2de8807f42d.png',
     parallelComputingImg:
         'https://img14.360buyimg.com/imagetools/jfs/t1/207198/23/7638/3037/617f4fc4E0e20ab9d/40197a6c79c5a33f.png',

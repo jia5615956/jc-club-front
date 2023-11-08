@@ -1,9 +1,10 @@
 import React from 'react'
 import { Popover, Spin } from 'antd'
 import { debounce } from '@utils'
-import { imgObject, RankingTypeText, RankingTypeBtnText } from '../../constant'
+import { RankingTypeText, RankingTypeBtnText } from '../../constant'
 import './index.less'
 import { message } from 'antd'
+import { imgObject } from '@constants'
 
 const rankingBackImg = {
   0: imgObject.ranking1Img,
