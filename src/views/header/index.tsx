@@ -58,7 +58,7 @@ const Header = () => {
 				</div>
 				<div className="head-navigator-user-box">
 					<div className="time-box"></div>
-					{'/question-bank' == pathname && (
+					{/* {'/question-bank' == pathname && (
 						<div className="head-navigator-input-box">
 							<Search
 								placeholder="请输入感兴趣的内容～"
@@ -66,7 +66,7 @@ const Header = () => {
 								style={{ width: 300, borderRadius: '10px' }}
 							/>
 						</div>
-					)}
+					)} */}
 					{/* <div className="head-navigator-bell"> */}
 					{/* <Icon type="bell" /> */}
 					{/* </div> */}

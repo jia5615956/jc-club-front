@@ -82,7 +82,7 @@ const QuestionBank = () => {
             pageSize: 10,
             labelId: labelList,
             categoryId: secondCategoryId,
-            subjectDifficult: 1
+            // subjectDifficult: 1
         }
         req({
             method: 'post',
