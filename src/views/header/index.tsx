@@ -37,7 +37,6 @@ const Header = () => {
 	const navigate = useNavigate()
 
 	const handleMenuClick = e => {
-		console.log(e)
 		if (e.key != 1) {
 			return message.info('敬请期待')
 		}
@@ -68,9 +67,9 @@ const Header = () => {
 							/>
 						</div>
 					)}
-					<div className="head-navigator-bell">
-						{/* <Icon type="bell" /> */}
-					</div>
+					{/* <div className="head-navigator-bell"> */}
+					{/* <Icon type="bell" /> */}
+					{/* </div> */}
 					<div className="head-navigator-user-img">
 						<Dropdown
 							menu={{

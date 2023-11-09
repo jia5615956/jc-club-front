@@ -1,3 +1,4 @@
+const host = import.meta.env.VITE_IMG_HOST
 /**
  * 难度筛选
  */
@@ -56,7 +57,7 @@ export const gradeObject = {
 
 export const imgObject = {
     clickImg:
-        'http://117.72.14.166:9000/jichi/icon/%E7%83%AD%E9%97%A8.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin%2F20231102%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20231102T153146Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=e6b8cdb3231b1c3d7114212cb9278ecc17cf6d4ec0f759ea0200e04156d4c8b7',
+        host + '/jichi/icon/%E7%83%AD%E9%97%A8.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin%2F20231102%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20231102T153146Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=e6b8cdb3231b1c3d7114212cb9278ecc17cf6d4ec0f759ea0200e04156d4c8b7',
     ranking1Img:
         'https://img12.360buyimg.com/imagetools/jfs/t1/110906/3/22471/3750/6214a3bfE392596cf/122c9e4b30948682.png',
     ranking2Img:
