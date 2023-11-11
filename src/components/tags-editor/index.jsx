@@ -258,7 +258,9 @@ export default class TagsEditor extends Component {
                                 {tagElem}
                             </Tooltip>
                         ) : (
-                            tagElem
+                            <div key={item.id}>
+                                {tagElem}
+                            </div>
                         );
                     })}
                 {inputVisible && (

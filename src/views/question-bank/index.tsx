@@ -1,39 +1,32 @@
-// import { Component } from 'react';
 import { useState, useEffect, memo } from 'react'
-// import { useSearchParams } from 'react-router-dom'
 import QuestionList from '@components/question-list';
 import CategoryList from '@components/category-list';
 import ContributionList from './components/contribution-list';
 import RankingList from './components/practice-list'
 import { apiName } from './constant';
 import req from '@utils/request';
-import { Spin } from 'antd';
 import './index.less';
 
 const QuestionBank = () => {
 
     const [firstCategoryList, setFirstCategoryList] = useState<Record<string, any>[]>([])
     const [questionList, setQuestionList] = useState([])
-    const [isShowSpin, setIsShowSpin] = useState(false)
     const [labelList, setLabelList] = useState<string | number>(); // 选中的标签列表
-    const [difficulty, setDiffculty] = useState(0); //困难度（全部）
+    const [difficulty, setDiffculty] = useState(''); //困难度（全部）
     const [total, setTotal] = useState(0); // 总条数
     const [pageIndex, setPageIndex] = useState(0);
     const [primaryCategoryId, setPromaryCategoryId] = useState(''); //第一个大类id
     const [secondCategoryId, setSecondCategoryId] = useState('')
 
-    // let [searchParams, setSearchParams] = useSearchParams();
-    // const changeUrlParam = () => {
-    //     // console.log(searchParams.size)
-    //     setSearchParams({ id: 1 })
-    //     // window.history.pushState({}, '0', window.location.href + '?url=' + '参数');
-    // }
+    const [loading, setLoading] = useState(false)
+    const [finished, setFinished] = useState(false)
+    const [switchFlag, setSwitchFlag] = useState(false)
+
 
     /**
      * 获取大类分类
      */
     const getPrimaryCategoryInfo = () => {
-        setIsShowSpin(true)
         req({
             method: 'post',
             url: apiName.queryPrimaryCategory,
@@ -47,8 +40,6 @@ const QuestionBank = () => {
             })
             .catch((err: string) => {
                 console.log(err)
-            }).finally(() => {
-                setIsShowSpin(false)
             })
     }
 
@@ -60,8 +51,8 @@ const QuestionBank = () => {
         setLabelList('')
         setPromaryCategoryId(item.id)
         setQuestionList([])
-        setPageIndex(1)
         setTotal(0)
+        setPageIndex(1)
     };
 
 
@@ -73,24 +64,43 @@ const QuestionBank = () => {
     const onChangeLabel = (secondCategoryId: any, assembleIds: string) => {
         setSecondCategoryId(secondCategoryId)
         setLabelList(assembleIds)
+        setQuestionList([])
+        setTotal(0)
         setPageIndex(1)
     };
 
     const queryQuestionList = () => {
+        setLoading(true)
         const params = {
             pageNo: pageIndex,
-            pageSize: 10,
+            pageSize: 20,
             labelId: labelList,
             categoryId: secondCategoryId,
-            // subjectDifficult: 1
+            subjectDifficult: difficulty || ''
         }
         req({
             method: 'post',
             url: apiName.getSubjectPage,
             data: params
         }).then(res => {
-            setTotal(res.data.total)
-            setQuestionList(res.data.result)
+            setLoading(false)
+            let lastList = [...questionList]
+            const { total, result } = res.data
+            if (result.length) {
+                lastList = lastList.concat(result)
+                setQuestionList(lastList)
+                setTotal(total)
+                if (result.length < 20 || lastList.length >= total) {
+                    setFinished(true)
+                } else {
+                    setFinished(false)
+                    setSwitchFlag(false)
+                }
+            }
+        }).catch(err => {
+            console.log(err)
+        }).finally(() => {
+            setLoading(false)
         })
     }
 
@@ -102,10 +112,9 @@ const QuestionBank = () => {
 
     useEffect(() => {
         if (labelList && secondCategoryId) {
-            // setSearchParams({ second: secondCategoryId, label: labelList })
             queryQuestionList()
         }
-    }, [labelList, pageIndex, secondCategoryId])
+    }, [labelList, pageIndex, secondCategoryId, difficulty])
 
     /**
    * 更多分类切换
@@ -120,10 +129,34 @@ const QuestionBank = () => {
         setTotal(0)
     }
 
+    const scrollHandler = e => {
+        let scrollTop = e.target.scrollTop; // listBox 滚动条向上卷曲出去的长度，随滚动变化
+        let clientHeight = e.target.clientHeight; // listBox 的视口可见高度，固定不变
+        let scrollHeight = e.target.scrollHeight; // listBox 的整体高度，随数据加载变化
+        let saveHeight = 30; // 安全距离，距离底部XX时，触发加载
+        let tempVal = scrollTop + clientHeight + saveHeight;
+        // 如果不加入 saveHeight 安全距离，在 scrollTop + clientHeight == scrollHeight 时，触发加载
+        // 加入安全距离，相当于在 scrollTop + clientHeight >= scrollHeight - 30 时，触发加载，比前者更早触发
+        if (tempVal >= scrollHeight) {
+            if (!finished && !switchFlag) {
+                // 数据加载未结束 && 未加锁
+                setPageIndex(pageIndex + 1)
+            }
+            setSwitchFlag(true)
+        }
+    }
+
+    const changeDifficuty = cur => {
+        if (cur === difficulty) return
+        setPageIndex(1)
+        setDiffculty(cur)
+        setQuestionList([])
+    }
+
     return (
         <div className="question-bank-box">
-            <Spin spinning={isShowSpin}>
-                <div className="question-box">
+            <div className='mask-box' onScroll={scrollHandler}>
+                <div className="question-box" >
                     <div className="category-list-box">
                         {firstCategoryList?.length > 0 && (
                             <CategoryList
@@ -141,15 +174,20 @@ const QuestionBank = () => {
                             pageIndex={pageIndex}
                             total={total}
                             questionList={questionList}
-                            // handleChangeSelect={this.handleChangeSelect}
-                            // onChangePagination={this.onChangePagination}
-                            difficulty={difficulty}
-                            // primaryCategoryId={this.primaryCategoryId}
+                            changeDifficuty={changeDifficuty}
                             labelList={labelList}
                         />
                     </div>
+
+                    <div className='loading-more'>{
+                        questionList.length == 0
+                            ? "暂无数据"
+                            : loading && !finished
+                                ? "努力加载中..."
+                                : "我是有底线的（："
+                    }</div>
                 </div>
-            </Spin>
+            </div>
             <div className="ranking-box">
                 <RankingList />
                 <ContributionList />
@@ -157,4 +195,5 @@ const QuestionBank = () => {
         </div>
     );
 }
+
 export default memo(QuestionBank)

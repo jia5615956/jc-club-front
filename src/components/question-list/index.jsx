@@ -1,8 +1,9 @@
 import React, { Fragment, useState } from "react";
-import { Tag, Table, Input } from "antd";
+import { Tag, Table, Input, Radio, Space, Button, Divider } from "antd";
 import { filterDifficulty, gradeObject } from "@constants";
 import { useNavigate } from "react-router-dom";
 import "./index.less";
+
 const { Search } = Input;
 
 const colors = ['#ffffb8', '#f4ffb8', '#b5f5ec', '#bae0ff', '#d9f7be', '#efdbff', ' #ffd6e7', '#d6e4ff']
@@ -10,11 +11,8 @@ const colors = ['#ffffb8', '#f4ffb8', '#b5f5ec', '#bae0ff', '#d9f7be', '#efdbff'
 
 const QuestionList = (props) => {
 
-
-  const [selectValue, setSelectValue] = useState('难度')
+  const [difficuty, setDifficuty] = useState(0)
   const navigate = useNavigate();
-
-
 
   const RandomNumBoth = (Min, Max) => {
     //差值
@@ -22,6 +20,15 @@ const QuestionList = (props) => {
     // 随机数
     const Rand = Math.random();
     return Min + Math.round(Rand * Range); //四舍五入 
+  }
+
+  const handleSearch = (close) => {
+    props.changeDifficuty(difficuty)
+    close()
+  }
+
+  const changeDifficuty = (e) => {
+    setDifficuty(e.target.value)
   }
 
   /**
@@ -40,8 +47,7 @@ const QuestionList = (props) => {
         return (
           <div className="question-info-container">
             <div className="question-info-desc">
-              {record.subjectName}
-
+              {record.id}: {record.subjectName}
             </div>
             <div className="question-info-tags">
               {item?.labelName?.length > 0 &&
@@ -62,31 +68,29 @@ const QuestionList = (props) => {
       dataIndex: "subjectDifficult",
       key: "subjectDifficult",
       align: "center",
-      filters: [
-        {
-          value: 0,
-          text: '全部',
-        },
-        {
-          value: 1,
-          text: '初级',
-        },
-        {
-          value: 2,
-          text: '中级',
-        },
-        {
-          value: 3,
-          text: '高级',
-        },
-        {
-          value: 4,
-          text: '资深',
-        },
-      ],
-      onFilter: (value, record) => {
-        return value === 0 ? record : record.subjectDifficult === value
-      },
+      filterDropdown: ({ close }) => (
+        <div style={{ padding: 16 }} onKeyDown={(e) => e.stopPropagation()}>
+          <div style={{ textAlign: 'center', fontSize: '16px', fontWeight: 'bold', marginBottom: 10 }}>请选择</div>
+          <Radio.Group style={{ width: '100%', textAlign: 'center' }} value={difficuty} onChange={changeDifficuty}>
+            <Space direction="vertical">
+              {
+                filterDifficulty.map(item => {
+                  return <Radio value={item.id} key={item.id}>{item.title}</Radio>
+                })
+              }
+            </Space>
+          </Radio.Group>
+
+          <Button
+            block
+            size="small"
+            type="primary"
+            style={{ marginTop: 12 }}
+            onClick={() => handleSearch(close)}
+          >
+            确定
+          </Button>
+        </div>),
       width: 90,
       render: (key) => {
         return (
@@ -97,61 +101,18 @@ const QuestionList = (props) => {
   ];
 
   /**
-   * 选择标签
-   * @param {*} id
-   */
-  const handleChangeSelect = (id) => {
-    let selectValue = "难度";
-    if (id != 0) {
-      filterDifficulty.forEach((item) => {
-        if (item.id == id) {
-          selectValue = item.id;
-        }
-      });
-    }
-    setSelectValue(selectValue)
-    props.handleChangeSelect(id);
-  };
-
-  /**
    * 进入详情
    * @param {*} item
    * @param {*} type
    * @returns
    */
-  const onChangeAction = (item, index) => () => {
-    let { isNotToDetail, difficulty, primaryCategoryId, labelList, pageIndex } =
-      props;
-    !isNotToDetail && navigate("/brush-question/" + item.id)
-    // this.props.history.push(
-    //   splicingQuery("/brush-questions", {
-    //     id: item?.id,
-    //     index: index + (pageIndex - 1) * 10 + 1,
-    //     difficulty,
-    //     primaryCategoryId,
-    //     labelList,
-    //   })
-    // );
-    if (!isNotToDetail) return;
-    toChangeSelectRows(item);
+  const onChangeAction = (item) => () => {
+    navigate("/brush-question/" + item.id)
+    // let { isNotToDetail } = props;
+    // !isNotToDetail && 
+    // if (!isNotToDetail) return;
   };
 
-  const toChangeSelectRows = (record) => {
-    let newSelectedRows = [...props.selectRows];
-    const isHas = newSelectedRows.some((rowItem) => rowItem.id === record.id);
-    if (isHas) {
-      newSelectedRows = newSelectedRows.filter(
-        (rowItem) => rowItem.id !== record.id
-      );
-    } else {
-      newSelectedRows.push(record);
-    }
-    props.setSelectRows(newSelectedRows);
-  };
-
-  const onChangePagination = (e) => {
-    props.onChangePagination(e);
-  };
 
   /**
    * 过滤框-搜索框-模块
@@ -174,8 +135,7 @@ const QuestionList = (props) => {
     );
   };
 
-  const { questionList, total, pageIndex, isHideSelect, isMultiple } =
-    props;
+  const { questionList, isHideSelect } = props;
 
   return (
     <Fragment>
@@ -193,20 +153,7 @@ const QuestionList = (props) => {
             rowKey="id"
             pagination={false}
             rowClassName="question-table-row"
-
           />
-          {/* {total > 10 && (
-            <Pagination
-              style={{
-                padding: "24px 0",
-                textAlign: "center",
-              }}
-              showQuickJumper
-              defaultCurrent={pageIndex}
-              total={total}
-              onChange={onChangePagination}
-            />
-          )} */}
         </div>
       </div>
     </Fragment>
