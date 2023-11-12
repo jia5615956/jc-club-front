@@ -1,12 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react'
 
-import {
-  CaretDownOutlined,
-  CaretUpOutlined,
-  DownOutlined,
-  RightOutlined,
-  UpOutlined
-} from '@ant-design/icons'
+import { CaretDownOutlined, CaretUpOutlined, RightOutlined } from '@ant-design/icons'
 import req from '@utils/request'
 import { Divider, Modal, Spin } from 'antd'
 import _ from 'lodash'
@@ -283,7 +277,7 @@ const CategoryList = ({ primaryCategoryId, categoryList, ...props }) => {
                         )
                       })}
                     </div>
-                    {secondCategoryItem.children.length > 5 ? (
+                    {/* {secondCategoryItem.children.length > 5 ? (
                       <div
                         id={`second_id_${secondCategoryIndex}`}
                         className='second-category-item-status'
@@ -299,7 +293,7 @@ const CategoryList = ({ primaryCategoryId, categoryList, ...props }) => {
                           {secondCategoryItem.isOpen ? <UpOutlined /> : <DownOutlined />}
                         </div>
                       </div>
-                    ) : null}
+                    ) : null} */}
                   </div>
                 )}
               </div>
