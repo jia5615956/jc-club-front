@@ -305,6 +305,7 @@ const CategoryList = ({ primaryCategoryId, categoryList, ...props }) => {
               dashed
               style={{
                 marginTop: 10,
+                marginBottom: 10,
                 fontSize: 13,
                 cursor: 'pointer'
               }}
@@ -326,11 +327,6 @@ const CategoryList = ({ primaryCategoryId, categoryList, ...props }) => {
     <div className='category-box'>
       <Fragment>{categoryList?.length && renderFirstContainer()}</Fragment>
       <Fragment>{secondCategoryList?.length > 0 && renderSecondContainer()}</Fragment>
-      {/* {!this.props.isHideSec && (
-                <Fragment>
-                    {secondCategoryList?.length > 0 && this.renderSecondContainer()}
-                </Fragment>
-            )} */}
       <Modal
         open={openMoreFlag}
         footer={null}

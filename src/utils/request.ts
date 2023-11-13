@@ -15,7 +15,6 @@ export const baseHttp = () => {
 }
 
 export default function request(config, url) {
-  console.log(config, url, 'config url')
   // const navigate = useNavigate()
   const userInfoStorage = localStorage.getItem('userInfo')
   const userInfo = userInfoStorage ? JSON.parse(userInfoStorage) : {}
