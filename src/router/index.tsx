@@ -1,41 +1,38 @@
-
 import App from '@/App'
-import QuestionBank from '@views/question-bank';
-import UploadQuestions from '@views/upload-questions';
-import BrushQuestions from '@views/brush-questions'
-import Login from '@views/login'
-import UserInfo from '@views/user-info'
-import {
-    createBrowserRouter,
-} from "react-router-dom";
+import { lazy } from 'react'
+import { createBrowserRouter } from 'react-router-dom'
 
 const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <App />,
-        children: [
-            {
-                path: "question-bank",
-                element: <QuestionBank />,
-            },
-            {
-                path: "brush-question/:id",
-                element: <BrushQuestions />,
-            },
-            {
-                path: "upload-question",
-                element: <UploadQuestions />,
-            },
-            {
-                path: 'login',
-                element: <Login />
-            },
-            {
-                path: 'user-info',
-                element: <UserInfo />
-            }
-        ],
-    },
-]);
+  {
+    path: '/',
+    element: <App />,
+    children: [
+      {
+        path: 'question-bank',
+        Component: lazy(() => import('@views/question-bank'))
+      },
+      {
+        path: 'brush-question/:id',
+        // element: <BrushQuestions />
+        Component: lazy(() => import('@views/brush-questions'))
+      },
+      {
+        path: 'upload-question',
+        // element: <UploadQuestions />
+        Component: lazy(() => import('@views/upload-questions'))
+      },
+      {
+        path: 'login',
+        // element: <Login />
+        Component: lazy(() => import('@views/login'))
+      },
+      {
+        path: 'user-info',
+        // element: <UserInfo />
+        Component: lazy(() => import('@views/user-info'))
+      }
+    ]
+  }
+])
 
 export default router

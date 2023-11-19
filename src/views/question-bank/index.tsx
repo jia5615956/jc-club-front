@@ -181,7 +181,7 @@ const QuestionBank = () => {
 
           <div className='loading-more'>
             {questionList.length == 0
-              ? '暂无数据'
+              ? ''
               : loading && !finished
               ? '努力加载中...'
               : '我是有底线的（：'}

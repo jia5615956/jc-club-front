@@ -2,7 +2,8 @@ import Head from '@/imgs/head.jpg'
 import Logo from '@/imgs/logo.jpg'
 import { HeartOutlined, LikeOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons'
 import TopMenu from '@components/top-menu'
-import { Dropdown, Input, message } from 'antd'
+import req from '@utils/request'
+import { Dropdown, Input, Modal, message } from 'antd'
 import { useNavigate } from 'react-router-dom'
 
 const { Search } = Input
@@ -42,10 +43,44 @@ const Header = () => {
     if (!userInfoStorage) {
       return message.info('请登录')
     }
-    if (e.key != 1) {
-      return message.info('敬请期待')
+    const { loginId } = JSON.parse(userInfoStorage)
+    switch (e.key) {
+      case '1':
+        navigate('/user-info')
+        break
+      case '4':
+        // 退出
+        Modal.confirm({
+          title: '退出提示',
+          content: '确定退出当前用户登录吗？',
+          okText: '确定',
+          cancelText: '取消',
+          onOk: () => {
+            req(
+              {
+                method: 'get',
+                url: '/user/logOut',
+                params: {
+                  userName: loginId
+                }
+              },
+              '/auth'
+            ).then(res => {
+              if (res.success) {
+                localStorage.removeItem('userInfo')
+                message.info('退出成功')
+                setTimeout(() => {
+                  navigate('/login')
+                }, 500)
+              }
+            })
+          }
+        })
+        break
+      default:
+        message.info('敬请期待')
+        break
     }
-    navigate('/user-info')
   }
 
   return (
@@ -62,15 +97,15 @@ const Header = () => {
         </div>
         <div className='head-navigator-user-box'>
           <div className='time-box'></div>
-          {/* {'/question-bank' == pathname && (
-						<div className="head-navigator-input-box">
-							<Search
-								placeholder="请输入感兴趣的内容～"
-								onSearch={(value) => console.log(value)}
-								style={{ width: 300, borderRadius: '10px' }}
-							/>
-						</div>
-					)} */}
+          {'/question-bank' == pathname && (
+            <div className='head-navigator-input-box'>
+              <Search
+                placeholder='请输入感兴趣的内容～'
+                onSearch={value => console.log(value)}
+                style={{ width: 300, borderRadius: '10px' }}
+              />
+            </div>
+          )}
           {/* <div className="head-navigator-bell"> */}
           {/* <Icon type="bell" /> */}
           {/* </div> */}

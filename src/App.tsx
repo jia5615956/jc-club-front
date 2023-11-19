@@ -1,5 +1,5 @@
 import Header from '@views/header'
-import { memo, useEffect } from 'react'
+import { Suspense, memo, useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import './App.less'
 
@@ -25,7 +25,9 @@ const App = () => {
         className='content-box'
         style={{ width: location.pathname === '/login' ? '100%' : '1439px' }}
       >
-        <Outlet />
+        <Suspense fallback={<div></div>}>
+          <Outlet />
+        </Suspense>
       </div>
     </div>
   )

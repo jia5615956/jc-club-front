@@ -1,30 +1,82 @@
 import Head from '@/imgs/head.jpg'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import req from '@utils/request'
-import { Button, Card, Col, Form, Input, Radio, Row, message } from 'antd'
-import { memo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Button, Card, Col, Form, Input, Radio, Row, Upload, message } from 'antd'
+import { memo, useEffect, useState } from 'react'
 
 import './index.less'
 
 const { TextArea } = Input
-const apiName = '/user/update'
+const apiName = {
+  update: '/user/update',
+  queryInfo: '/user/getUserInfo'
+}
 
 const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 10, offset: 1 }
 }
 
+const beforeUpload = (file: RcFile) => {
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+  if (!isJpgOrPng) {
+    message.error('You can only upload JPG/PNG file!')
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2
+  if (!isLt2M) {
+    message.error('Image must smaller than 2MB!')
+  }
+  return isJpgOrPng && isLt2M
+}
+
+interface UserInfo {
+  nickName?: string
+  phone?: string
+  email?: string
+  sex?: string | number
+  introduce?: string
+}
+
+const Sex: Record<string, any> = {
+  1: '男',
+  2: '女'
+}
+
 const UserInfo = () => {
+  const userInfoStorage = localStorage.getItem('userInfo')
+  const { loginId = '' } = userInfoStorage ? JSON.parse(userInfoStorage) : {}
+
   const [form] = Form.useForm()
   const [editFlag, setEditFlag] = useState(false)
   const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  const [userInfo, setUserInfo] = useState<UserInfo>({})
+
+  const getUserInfo = async () => {
+    req(
+      {
+        method: 'post',
+        url: apiName.queryInfo,
+        data: {
+          userName: loginId
+        }
+      },
+      '/auth'
+    ).then(res => {
+      if (res?.success && res?.data) {
+        setUserInfo(res.data)
+        form.setFieldsValue(res.data)
+      }
+    })
+  }
+
+  useEffect(() => {
+    if (loginId) {
+      getUserInfo()
+    }
+  }, [loginId])
 
   const onFinish = () => {
     setLoading(true)
-    const userInfoStorage = localStorage.getItem('userInfo')
-    const { loginId = '' } = userInfoStorage ? JSON.parse(userInfoStorage) : {}
     const values = form.getFieldsValue()
     if (!Object.values(values).filter(Boolean).length) {
       setLoading(false)
@@ -37,7 +89,7 @@ const UserInfo = () => {
     req(
       {
         method: 'post',
-        url: apiName,
+        url: apiName.update,
         data: { ...params }
       },
       '/auth'
@@ -46,16 +98,22 @@ const UserInfo = () => {
         if (res.success) {
           message.success('更新成功')
           setTimeout(() => {
-            navigate('/question-bank')
-          }, 1000)
+            getUserInfo()
+            setLoading(false)
+            setEditFlag(false)
+          }, 500)
+        } else {
+          setLoading(false)
         }
-        setLoading(false)
-        setEditFlag(false)
       })
       .catch(() => {
         message.error('更新失败')
         setLoading(false)
       })
+  }
+
+  const handleChange = info => {
+    console.log(info)
   }
 
   const uploadButton = (
@@ -71,9 +129,33 @@ const UserInfo = () => {
         <Form {...layout} colon={false} form={form}>
           <Row>
             <Col span={16}>
-              <Form.Item label='用户头像'>
+              {editFlag ? (
+                <Form.Item label='用户头像' name='avatar'>
+                  <Upload
+                    name='uploadFile'
+                    listType='picture-card'
+                    className='avatar-uploader'
+                    accept='image/*'
+                    showUploadList={false}
+                    action='http://117.72.14.166:4000/upload'
+                    data={{
+                      bucket: 'jichi',
+                      objectName: 'icon'
+                    }}
+                    // beforeUpload={beforeUpload}
+                    onChange={handleChange}
+                  >
+                    {uploadButton}
+                  </Upload>
+                </Form.Item>
+              ) : (
+                <Form.Item label='用户头像'>
+                  <img className='user-info_header' src={Head} />
+                </Form.Item>
+              )}
+              {/* <Form.Item label='用户头像'>
                 <img className='user-info_header' src={Head} />
-              </Form.Item>
+              </Form.Item> */}
             </Col>
             <Col span={16}>
               {editFlag ? (
@@ -82,7 +164,7 @@ const UserInfo = () => {
                 </Form.Item>
               ) : (
                 <Form.Item label='用户昵称'>
-                  <>暂无</>
+                  <>{userInfo.nickName || ''}</>
                 </Form.Item>
               )}
             </Col>
@@ -96,7 +178,7 @@ const UserInfo = () => {
                 </Form.Item>
               ) : (
                 <Form.Item label='性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别'>
-                  <>未知</>
+                  <>{userInfo.sex ? Sex[userInfo.sex] : '未知'}</>
                 </Form.Item>
               )}
             </Col>
@@ -107,7 +189,7 @@ const UserInfo = () => {
                 </Form.Item>
               ) : (
                 <Form.Item label='手机号码'>
-                  <>暂无</>
+                  <>{userInfo.phone || ''}</>
                 </Form.Item>
               )}
             </Col>
@@ -121,7 +203,7 @@ const UserInfo = () => {
                 </Form.Item>
               ) : (
                 <Form.Item label='邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱'>
-                  <>暂无</>
+                  <>{userInfo.email || ''}</>
                 </Form.Item>
               )}
             </Col>
@@ -132,7 +214,7 @@ const UserInfo = () => {
                 </Form.Item>
               ) : (
                 <Form.Item label='个人简介'>
-                  <>这个人很懒，什么也没有留下。。。。</>
+                  <>{userInfo.introduce || '这个人很懒，什么也没有留下。。。。'}</>
                 </Form.Item>
               )}
             </Col>

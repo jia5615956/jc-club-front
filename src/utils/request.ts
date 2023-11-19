@@ -1,24 +1,12 @@
 import { message } from 'antd'
 import axios from 'axios'
 
-export const baseHttp = () => {
-  const http = axios.create({
-    baseURL: '/subject',
-    timeout: 5 * 60 * 1000, // request timeout
-    withCredentials: true, // send cookies when cross-domain requests
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8'
-    }
-  })
-
-  return http
-}
-
 export default function request(config, url) {
   // const navigate = useNavigate()
   const userInfoStorage = localStorage.getItem('userInfo')
   const userInfo = userInfoStorage ? JSON.parse(userInfoStorage) : {}
   const baseURL = url || '/subject/subject'
+  // const baseURL = url || '/subject'
   // 1.创建axios的实例
   const instance = axios.create({
     baseURL,
