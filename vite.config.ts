@@ -38,6 +38,10 @@ export default ({ mode }) => {
         '/auth': {
           target: env.VITE_API_HOST,
           changeOrigin: true
+        },
+        '/oss': {
+          target: env.VITE_API_HOST,
+          changeOrigin: true
         }
       }
     }

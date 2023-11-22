@@ -35,6 +35,9 @@ dependencies:
   react-router-dom:
     specifier: ^6.16.0
     version: registry.npmmirror.com/react-router-dom@6.16.0(react-dom@18.1.0)(react@18.1.0)
+  swiper:
+    specifier: ^11.0.4
+    version: registry.npmmirror.com/swiper@11.0.4
   wangeditor:
     specifier: ^4.7.15
     version: registry.npmmirror.com/wangeditor@4.7.15
@@ -7092,6 +7095,13 @@ packages:
     dependencies:
       has-flag: registry.npmmirror.com/has-flag@4.0.0
     dev: true
+
+  registry.npmmirror.com/swiper@11.0.4:
+    resolution: {integrity: sha512-qtUxILrD4aD++rpKzGrkz3IAWL92f9uTrDwjb6HaNLmPvJhZCE/83DL+9w4kIgDDJeF6QKalV47rMBN77UOVYQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/swiper/-/swiper-11.0.4.tgz}
+    name: swiper
+    version: 11.0.4
+    engines: {node: '>= 4.7.0'}
+    dev: false
 
   registry.npmmirror.com/tapable@2.2.1:
     resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/tapable/-/tapable-2.2.1.tgz}

@@ -42,9 +42,16 @@ const Sex: Record<string, any> = {
   2: '女'
 }
 
+const normFile = (e: any) => {
+  if (Array.isArray(e)) {
+    return e
+  }
+  return e?.fileList
+}
+
 const UserInfo = () => {
   const userInfoStorage = localStorage.getItem('userInfo')
-  const { loginId = '' } = userInfoStorage ? JSON.parse(userInfoStorage) : {}
+  const { loginId = '', tokenValue = '' } = userInfoStorage ? JSON.parse(userInfoStorage) : {}
 
   const [form] = Form.useForm()
   const [editFlag, setEditFlag] = useState(false)
@@ -130,14 +137,18 @@ const UserInfo = () => {
           <Row>
             <Col span={16}>
               {editFlag ? (
-                <Form.Item label='用户头像' name='avatar'>
+                <Form.Item label='用户头像' valuePropName='fileList' getValueFromEvent={normFile}>
                   <Upload
                     name='uploadFile'
                     listType='picture-card'
                     className='avatar-uploader'
                     accept='image/*'
                     showUploadList={false}
-                    action='http://117.72.14.166:4000/upload'
+                    withCredentials
+                    action='/oss/upload'
+                    headers={{
+                      satoken: 'jichi ' + tokenValue
+                    }}
                     data={{
                       bucket: 'jichi',
                       objectName: 'icon'
