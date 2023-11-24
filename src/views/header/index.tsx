@@ -83,14 +83,15 @@ const Header = () => {
     }
   }
 
+  const handleJump = value => {
+    navigate('/search-detail?t=' + value)
+  }
+
   return (
     <div className='head-navigator-box'>
       <div className='head-navigator'>
         <div className='head-navigator-left'>
-          <div
-            className='head-navigator-logo'
-            onClick={() => (window.location.href = '/question-bank')}
-          >
+          <div className='head-navigator-logo'>
             <img src={Logo} style={{ height: 50 }} />
           </div>
           <TopMenu />
@@ -101,7 +102,11 @@ const Header = () => {
             <div className='head-navigator-input-box'>
               <Search
                 placeholder='请输入感兴趣的内容～'
-                onSearch={value => console.log(value)}
+                onSearch={value => {
+                  if (value) {
+                    handleJump(value)
+                  }
+                }}
                 style={{ width: 300, borderRadius: '10px' }}
               />
             </div>

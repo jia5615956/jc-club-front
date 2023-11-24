@@ -34,7 +34,7 @@ export default function request(config, url) {
     res => {
       let { code } = res.data
       if (code === 500) {
-        message.error(res.data.message)
+        // message.error(res.data.message)
       }
       if (code === 401) {
         window.location.replace('/login')

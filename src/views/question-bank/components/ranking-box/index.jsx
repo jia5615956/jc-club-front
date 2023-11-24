@@ -22,8 +22,12 @@ export default function RankingBox(props) {
       props.onHandleRanking && props.onHandleRanking(index)
     })
   const onJump = debounce(() => {
+    if (props.onHandleJump) {
+      props.onHandleJump()
+    } else {
+      message.info('敬请期待')
+    }
     // props.onHandleJump && props.onHandleJump()
-    message.info('敬请期待')
   })
   const tabList = [
     {

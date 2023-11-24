@@ -14,7 +14,6 @@ const QuestionBank = () => {
   const [difficulty, setDiffculty] = useState('') //困难度（全部）
   const [total, setTotal] = useState(0) // 总条数
   const [pageIndex, setPageIndex] = useState(0)
-  const [secondCategoryId, setSecondCategoryId] = useState('')
 
   const [selectedValue, setSelectedValue] = useState({
     primaryId: '', // 大类ID

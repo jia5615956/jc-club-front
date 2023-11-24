@@ -35,6 +35,7 @@ interface UserInfo {
   email?: string
   sex?: string | number
   introduce?: string
+  avatar?: string
 }
 
 const Sex: Record<string, any> = {
@@ -57,6 +58,7 @@ const UserInfo = () => {
   const [editFlag, setEditFlag] = useState(false)
   const [loading, setLoading] = useState(false)
   const [userInfo, setUserInfo] = useState<UserInfo>({})
+  const [avatar, setAvatar] = useState()
 
   const getUserInfo = async () => {
     req(
@@ -85,13 +87,17 @@ const UserInfo = () => {
   const onFinish = () => {
     setLoading(true)
     const values = form.getFieldsValue()
-    if (!Object.values(values).filter(Boolean).length) {
+    // return console.log(values)
+    if (!Object.values(values).filter(Boolean).length && !avatar) {
       setLoading(false)
       return
     }
     const params = {
       userName: loginId,
       ...values
+    }
+    if (avatar) {
+      params.avatar = avatar
     }
     req(
       {
@@ -119,8 +125,11 @@ const UserInfo = () => {
       })
   }
 
-  const handleChange = info => {
-    console.log(info)
+  const handleChange = ({ file }) => {
+    // console.log(info)
+    if (file.status === 'done' && file.response.success && file.response.data) {
+      setAvatar(file.response.data)
+    }
   }
 
   const uploadButton = (
@@ -150,23 +159,24 @@ const UserInfo = () => {
                       satoken: 'jichi ' + tokenValue
                     }}
                     data={{
-                      bucket: 'jichi',
+                      bucket: 'user',
                       objectName: 'icon'
                     }}
                     // beforeUpload={beforeUpload}
                     onChange={handleChange}
                   >
-                    {uploadButton}
+                    {avatar ? (
+                      <img src={avatar} style={{ height: '80px', width: '80px' }} />
+                    ) : (
+                      uploadButton
+                    )}
                   </Upload>
                 </Form.Item>
               ) : (
                 <Form.Item label='用户头像'>
-                  <img className='user-info_header' src={Head} />
+                  <img className='user-info_header' src={userInfo.avatar || Head} />
                 </Form.Item>
               )}
-              {/* <Form.Item label='用户头像'>
-                <img className='user-info_header' src={Head} />
-              </Form.Item> */}
             </Col>
             <Col span={16}>
               {editFlag ? (
