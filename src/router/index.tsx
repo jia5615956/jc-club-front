@@ -36,8 +36,8 @@ const router = createBrowserRouter([
         Component: lazy(() => import('@views/search-details'))
       },
       {
-        path: 'search-question',
-        Component: lazy(() => import('@views/search-question'))
+        path: 'personal-center',
+        Component: lazy(() => import('@views/personal-center'))
       }
     ]
   }

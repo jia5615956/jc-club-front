@@ -67,12 +67,12 @@ const ContributionList = props => {
     ).then(res => {
       if (res.success && res.data) {
         if (res.data.includes('subject:add')) {
-          navigate('/upload-questions')
+          window.open('/upload-question')
         } else {
-          message.info('敬请期待')
+          message.info('暂无权限')
         }
       } else {
-        message.info('敬请期待')
+        message.info('暂无权限')
       }
     })
   }

@@ -133,7 +133,8 @@ const QuestionList = props => {
    * @returns
    */
   const onChangeAction = item => () => {
-    navigate('/brush-question/' + item.id)
+    // navigate('/brush-question/' + item.id)
+    window.open('/brush-question/' + item.id, '_blank')
     // let { isNotToDetail } = props;
     // !isNotToDetail &&
     // if (!isNotToDetail) return;

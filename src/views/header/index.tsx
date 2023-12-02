@@ -2,9 +2,12 @@ import Head from '@/imgs/head.jpg'
 import Logo from '@/imgs/logo.jpg'
 import { HeartOutlined, LikeOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons'
 import TopMenu from '@components/top-menu'
+import LoginQrcode from '@imgs/login_qrcode.jpg'
 import req from '@utils/request'
-import { Dropdown, Input, Modal, message } from 'antd'
+import { Button, Dropdown, Input, Modal, Popover, Space, message } from 'antd'
 import { useNavigate } from 'react-router-dom'
+
+import './index.less'
 
 const { Search } = Input
 
@@ -31,6 +34,32 @@ const menuItems = [
     label: '退出',
     key: 4,
     icon: <LoginOutlined style={{ fontSize: '16px' }} />
+  }
+]
+
+const discoverItems = [
+  {
+    title: '联系我',
+    subTitle: '一键添加鸡哥微信',
+    key: 'wechat'
+  },
+  {
+    title: '跟我做',
+    subTitle: '从0到1做鸡翅Club项目',
+    key: 'club',
+    path: ''
+  },
+  {
+    title: '更深入',
+    subTitle: '从0到1做企业级框架项目',
+    key: 'deep',
+    path: ''
+  },
+  {
+    title: '加星球',
+    subTitle: '一键进入鸡哥的知识星球',
+    key: 'star',
+    path: ''
   }
 ]
 
@@ -87,6 +116,12 @@ const Header = () => {
     navigate('/search-detail?t=' + value)
   }
 
+  const goPath = item => {
+    if (item.path) {
+      window.open(item.path, '_blank')
+    }
+  }
+
   return (
     <div className='head-navigator-box'>
       <div className='head-navigator'>
@@ -97,7 +132,50 @@ const Header = () => {
           <TopMenu />
         </div>
         <div className='head-navigator-user-box'>
-          <div className='time-box'></div>
+          <Dropdown
+            placement='bottom'
+            trigger={['click']}
+            destroyPopupOnHide
+            dropdownRender={() => {
+              return (
+                <div className='drop-down-box'>
+                  <Space size='large'>
+                    {discoverItems.map(item => {
+                      return (
+                        <div className='drop-down-item' key={item.key} onClick={() => goPath(item)}>
+                          {item.key === 'wechat' ? (
+                            <>
+                              <Popover
+                                zIndex={2000}
+                                placement='bottom'
+                                content={() => {
+                                  return (
+                                    <div>
+                                      <img src={LoginQrcode} />
+                                    </div>
+                                  )
+                                }}
+                              >
+                                <div className='drop-down-item-title'>{item.title}</div>
+                                <div className='drop-down-item-content'>{item.subTitle}</div>
+                              </Popover>
+                            </>
+                          ) : (
+                            <>
+                              <div className='drop-down-item-title'>{item.title}</div>
+                              <div className='drop-down-item-content'>{item.subTitle}</div>
+                            </>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </Space>
+                </div>
+              )
+            }}
+          >
+            <Button type='link'>发现精彩</Button>
+          </Dropdown>
           {'/question-bank' == pathname && (
             <div className='head-navigator-input-box'>
               <Search
@@ -111,9 +189,6 @@ const Header = () => {
               />
             </div>
           )}
-          {/* <div className="head-navigator-bell"> */}
-          {/* <Icon type="bell" /> */}
-          {/* </div> */}
           <div className='head-navigator-user-img'>
             <Dropdown
               menu={{
