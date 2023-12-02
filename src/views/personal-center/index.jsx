@@ -1,9 +1,7 @@
 import { IdcardOutlined, LikeTwoTone, MailOutlined, StarTwoTone } from '@ant-design/icons'
 import { Menu } from 'antd'
-import React, { Component } from 'react'
-// import JDreq from '@common/JDreq'
 import PubSub from 'pubsub-js'
-// import headLog from './headLog.png'
+import React, { Component } from 'react'
 import CollectionBag from './components/collection-bag'
 import GoodBag from './components/good-bag'
 import './index.less'
@@ -30,27 +28,6 @@ export default class PersonalCenter extends Component {
     1: '点赞'
   }
   componentDidMount() {
-    // JDreq({
-    //   method: 'post',
-    //   url: 'admin/person/home/getPersonInfo'
-    // }).then(res => {
-    //   this.setState(
-    //     {
-    //       userName: res.data?.name ?? '',
-    //       intervieweEamil: res.data?.email ?? '',
-    //       headImg: res.data?.headImg ?? '',
-    //       department: res.data?.departmentName ?? '',
-    //       goodAmount: res.data?.thumpCount ?? 0,
-    //       collectionAmount: res.data?.collectCount ?? 0,
-    //       practiceAmount: res.data?.practiceCount ?? 0,
-    //       inputAmount: res.data?.subjectCount ?? 0
-    //     },
-    //     () => {
-    //       window.localStorage.setItem('interviewName', res.data?.name ?? 'XXX')
-    //       window.localStorage.setItem('interviewEamil', res.data?.email ?? 'XXX')
-    //     }
-    //   )
-    // })
     PubSub.subscribe('handleToRender', () => {
       this.setState({})
     })
@@ -94,11 +71,9 @@ export default class PersonalCenter extends Component {
               <div className='personal-center-introduction-detail-information'>
                 <span className='personal-center-introduction-detail-information-content'>
                   <IdcardOutlined style={{ color: 'blue', marginRight: '3px' }} />
-                  {/* 部门：{department} */}
                 </span>
                 <span className='personal-center-introduction-detail-information-content'>
                   <MailOutlined style={{ color: 'blue', marginRight: '3px' }} />
-                  {/* 邮箱：{intervieweEamil} */}
                 </span>
               </div>
             </div>

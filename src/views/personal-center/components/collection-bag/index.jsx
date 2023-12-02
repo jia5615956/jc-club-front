@@ -53,35 +53,7 @@ export default class CollectionBag extends Component {
   /**
    * 获取一级分类数据
    */
-  getCollectionList() {
-    // JDreq({
-    //   method: 'post',
-    //   data: {
-    //     pageInfo: {
-    //       pageIndex: this.pageIndex,
-    //       pageSize: this.pageSize,
-    //     },
-    //   },
-    //   url: apiName.getCollectionList,
-    // })
-    //   .then((res) => {
-    //     if (res.data && res.data.pageList?.length > 0) {
-    //       this.total = res.data.pageInfo.total
-    //       this.setState({
-    //         collectionList: res.data.pageList,
-    //         isShowSpin: false,
-    //         isShowSkeleton: false,
-    //       })
-    //     } else {
-    //       this.total = 0
-    //       this.setState({
-    //         collectionList: [],
-    //         isShowSpin: false,
-    //       })
-    //     }
-    //   })
-    //   .catch((err) => console.log(err))
-  }
+  getCollectionList() {}
 
   /**
    * 分页

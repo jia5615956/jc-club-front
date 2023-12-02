@@ -52,34 +52,7 @@ export default class GoodBag extends Component {
   /**
    * 获取一级分类数据
    */
-  getGoodList() {
-    // JDreq({
-    //   method: 'post',
-    //   data: {
-    //     pageInfo: {
-    //       pageIndex: this.pageIndex,
-    //       pageSize: this.pageSize,
-    //     },
-    //   },
-    //   url: apiName.getGoodList,
-    // })
-    //   .then((res) => {
-    //     if (res.data && res.data.pageList?.length > 0) {
-    //       this.total = res.data.pageInfo.total
-    //       this.setState({
-    //         goodList: res.data.pageList,
-    //         isShowSpin: false,
-    //       })
-    //     } else {
-    //       this.total = 0
-    //       this.setState({
-    //         goodList: [],
-    //         isShowSpin: false,
-    //       })
-    //     }
-    //   })
-    //   .catch((err) => console.log(err))
-  }
+  getGoodList() {}
 
   /**
    * 分页
