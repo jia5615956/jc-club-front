@@ -1,9 +1,11 @@
+import { CloseCircleFilled } from '@ant-design/icons'
 import { debounce } from '@utils'
 import { Input, Select, Tooltip, message } from 'antd'
 import _ from 'lodash'
-import React, { Component, Fragment } from 'react'
+import React, { Component, Fragment, createRef } from 'react'
 import { optionLetter } from '../../constant'
-import KindEditor from '../kind-editor'
+import QuestionEditor from '../question-editor'
+
 import './index.less'
 const { TextArea } = Input
 const { Option } = Select
@@ -49,7 +51,8 @@ export default class OptionInputBox extends Component {
     }
   }
 
-  kindEditor = KindEditor | null
+  // kindEditor = KindEditor | null
+  kindEditor = createRef()
   subjectAnswer = '' // 选项内容
 
   /**
@@ -98,10 +101,10 @@ export default class OptionInputBox extends Component {
    */
   onChangeOptEditor = (index, type) => () => {
     let { optionList } = this.state
-    this.kindEditor && this.kindEditor.onClear()
     if (type === 'submit') {
       _.set(optionList, [index, 'label'], !!this.subjectAnswer ? this.subjectAnswer : defalutLabel)
     }
+    this.kindEditor && this.kindEditor.current.onClear()
     _.set(optionList, [index, 'isShowEditor'], false)
     this.subjectAnswer = ''
     this.setState(
@@ -131,7 +134,7 @@ export default class OptionInputBox extends Component {
           optionList
         },
         () => {
-          this.kindEditor && this.kindEditor.onCashBack()
+          this.kindEditor && this.kindEditor.current.onCashBack()
         }
       )
     })
@@ -140,7 +143,7 @@ export default class OptionInputBox extends Component {
    * 富文本编辑器
    * @param {*} e
    */
-  onChangeEditor = index => e => {
+  onChangeEditor = e => {
     this.subjectAnswer = e
   }
 
@@ -318,7 +321,7 @@ export default class OptionInputBox extends Component {
                     <div className='option-input-item-delete'>
                       {listLen > showDeleteLength && (
                         <Tooltip title='删除选项' onClick={this.onChangeAddOption(index, 'del')}>
-                          <img className='option-input-item-delete-icon' src='' />
+                          <CloseCircleFilled style={{ fontSize: '18px' }} />
                         </Tooltip>
                       )}
                     </div>
@@ -331,15 +334,7 @@ export default class OptionInputBox extends Component {
                     style={{ marginTop: 19 }}
                   >
                     <div className='option-input-editor'>
-                      <KindEditor
-                        ref={ref => {
-                          this.kindEditor = ref
-                        }}
-                        bodyHeight={145}
-                        borderRadius={12}
-                        onChange={this.onChangeEditor(index)}
-                        cashBackText={isShowTip ? '' : item.label}
-                      />
+                      <QuestionEditor onChange={this.onChangeEditor} ref={this.kindEditor} />
                       <div className='option-input-editor-btns'>
                         <Tooltip title='取消后内容将不会更新到选项框内'>
                           <div
@@ -395,7 +390,7 @@ export default class OptionInputBox extends Component {
               defaultActiveFirstOption={false}
               value={currentActiveList}
               placeholder='请选择'
-              style={{ minWidth: isMultiple ? '64px' : '68px', marginLeft: 4 }}
+              style={{ minWidth: isMultiple ? '84px' : '88px', marginLeft: 4 }}
               onChange={this.onChangeSelect}
             >
               {isJudge

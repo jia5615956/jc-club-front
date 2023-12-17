@@ -1,7 +1,9 @@
+import { saveUserInfo } from '@features/userInfoSlice.ts'
 import LoginQrcode from '@imgs/login_qrcode.jpg'
 import req from '@utils/request'
 import { Button, Input, Space, message } from 'antd'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import './index.less'
@@ -11,13 +13,30 @@ const loginApiName = '/user/doLogin'
 const Login = () => {
   const [validCode, setValidCode] = useState('')
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const changeCode = e => {
     setValidCode(e.target.value)
   }
 
+  const getUserInfo = async loginId => {
+    req(
+      {
+        method: 'post',
+        url: '/user/getUserInfo',
+        data: {
+          userName: loginId
+        }
+      },
+      '/auth'
+    ).then(res => {
+      if (res?.success && res?.data) {
+        dispatch(saveUserInfo(res.data))
+      }
+    })
+  }
+
   const doLogin = () => {
-    console.log(validCode)
     if (!validCode) return
     req(
       {
@@ -26,13 +45,14 @@ const Login = () => {
         params: { validCode }
       },
       '/auth'
-    ).then(res => {
+    ).then(async res => {
       if (res.success && res.data) {
         message.success('登录成功')
         localStorage.setItem('userInfo', JSON.stringify(res.data))
+        await getUserInfo(res.data.loginId)
         setTimeout(() => {
           navigate('/question-bank')
-        }, 1000)
+        }, 500)
       } else {
         message.error('登录失败，请重试')
       }

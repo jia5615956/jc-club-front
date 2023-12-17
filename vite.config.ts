@@ -25,7 +25,9 @@ export default ({ mode }) => {
         '@utils': path.resolve(__dirname, 'src/utils'),
         '@components': path.resolve(__dirname, 'src/components'),
         '@imgs': path.resolve(__dirname, 'src/imgs'),
-        '@constants': path.resolve(__dirname, 'src/constants')
+        '@constants': path.resolve(__dirname, 'src/constants'),
+        '@store': path.resolve(__dirname, 'src/store'),
+        '@features': path.resolve(__dirname, 'src/store/features')
       }
     },
     plugins: [react()],

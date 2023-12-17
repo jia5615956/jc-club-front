@@ -1,8 +1,9 @@
-import Head from '@/imgs/head.jpg'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
+import { saveUserInfo } from '@features/userInfoSlice.ts'
 import req from '@utils/request'
 import { Button, Card, Col, Form, Input, Radio, Row, Upload, message } from 'antd'
 import { memo, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import './index.less'
 
@@ -54,6 +55,8 @@ const UserInfo = () => {
   const userInfoStorage = localStorage.getItem('userInfo')
   const { loginId = '', tokenValue = '' } = userInfoStorage ? JSON.parse(userInfoStorage) : {}
 
+  const dispatch = useDispatch()
+
   const [form] = Form.useForm()
   const [editFlag, setEditFlag] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -73,6 +76,7 @@ const UserInfo = () => {
     ).then(res => {
       if (res?.success && res?.data) {
         setUserInfo(res.data)
+        setAvatar(res.data.avatar || '')
         form.setFieldsValue(res.data)
       }
     })
@@ -87,7 +91,6 @@ const UserInfo = () => {
   const onFinish = () => {
     setLoading(true)
     const values = form.getFieldsValue()
-    // return console.log(values)
     if (!Object.values(values).filter(Boolean).length && !avatar) {
       setLoading(false)
       return
@@ -108,10 +111,13 @@ const UserInfo = () => {
       '/auth'
     )
       .then(res => {
+        dispatch(saveUserInfo(params))
+        setUserInfo(params)
+        setAvatar(params.avatar || '')
         if (res.success) {
           message.success('更新成功')
           setTimeout(() => {
-            getUserInfo()
+            // getUserInfo()
             setLoading(false)
             setEditFlag(false)
           }, 500)
@@ -126,7 +132,6 @@ const UserInfo = () => {
   }
 
   const handleChange = ({ file }) => {
-    // console.log(info)
     if (file.status === 'done' && file.response.success && file.response.data) {
       setAvatar(file.response.data)
     }
@@ -174,7 +179,12 @@ const UserInfo = () => {
                 </Form.Item>
               ) : (
                 <Form.Item label='用户头像'>
-                  <img className='user-info_header' src={userInfo.avatar || Head} />
+                  {userInfo.avatar ? (
+                    <img className='user-info_header' src={userInfo.avatar} />
+                  ) : (
+                    <div />
+                  )}
+                  {/* <img className='user-info_header' src={userInfo.avatar || Head} /> */}
                 </Form.Item>
               )}
             </Col>

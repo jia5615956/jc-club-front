@@ -36,8 +36,20 @@ const router = createBrowserRouter([
         Component: lazy(() => import('@views/search-details'))
       },
       {
-        path: 'personal-center',
+        path: 'personal-center/:tab',
         Component: lazy(() => import('@views/personal-center'))
+      },
+      {
+        path: 'practice-questions',
+        Component: lazy(() => import('@views/practise/practice-questions'))
+      },
+      {
+        path: 'practice-detail/:id',
+        Component: lazy(() => import('@views/practise/practice-details/index1.jsx'))
+      },
+      {
+        path: 'practice-analytic/:id',
+        Component: lazy(() => import('@views/practise/practice-analytic'))
       }
     ]
   }

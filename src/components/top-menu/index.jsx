@@ -7,22 +7,26 @@ const MENULIST = [
   {
     key: 'questionBank',
     title: '刷题',
-    route: '/question-bank'
+    route: '/question-bank',
+    finished: true
   },
   {
     key: 'prictiseQuestion',
     title: '练题',
-    route: '/brush-question'
+    route: '/practice-questions',
+    finished: true
   },
   {
     key: 'practiceQuestions',
     title: '鸡圈',
-    route: '/practice-questions'
+    route: '/jichi-club',
+    finished: false
   },
   {
     key: 'interList',
     title: '模拟面试',
-    route: '/inter-list'
+    route: '/inter-list',
+    finished: false
   }
 ]
 
@@ -55,10 +59,10 @@ const TopMenu = () => {
     if (!userInfoStorage) {
       return message.info('请登录')
     }
-    if (item.key === 'questionBank') {
-      if (location.pathname === '/question-bank') return
-      navigate('/question-bank')
+    if (item.finished) {
+      if (location.pathname === item.route) return
       setCurrentKey(item.key)
+      navigate(item.route)
     } else {
       return message.info('敬请期待')
     }

@@ -2,7 +2,7 @@ import { Card, Pagination, Spin } from 'antd'
 import React, { Component } from 'react'
 import { goodTabType } from '../../constant'
 import EmptyBox from '../empty-box'
-import GoodQuestion from '../good-question'
+import QuestionList from '../question-list'
 import './index.less'
 const tabList = [
   {
@@ -21,7 +21,7 @@ export default class GoodBag extends Component {
     this.state = {
       currentKey: goodTabType.testQuestions, // 选中的tab 默认选中第一个
       goodList: [],
-      isShowSpin: true
+      isShowSpin: false
     }
   }
 
@@ -52,7 +52,25 @@ export default class GoodBag extends Component {
   /**
    * 获取一级分类数据
    */
-  getGoodList() {}
+  getGoodList() {
+    this.total = 3
+    this.setState({
+      goodList: [
+        {
+          id: 100,
+          subjectName: 'Redis支持哪几种数据类型？'
+        },
+        {
+          id: 101,
+          subjectName: 'Redis的高级数据类型有什么？'
+        },
+        {
+          id: 102,
+          subjectName: 'Redis的优点有什么？'
+        }
+      ]
+    })
+  }
 
   /**
    * 分页
@@ -106,7 +124,7 @@ export default class GoodBag extends Component {
     switch (type) {
       // 收藏的试题
       case goodTabType.testQuestions:
-        return <GoodQuestion goodList={goodList} goodTotal={this.total} />
+        return <QuestionList list={goodList} total={this.total} name='点赞' />
     }
   }
 }

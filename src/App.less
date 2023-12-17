@@ -2,7 +2,7 @@
 
 .app-main {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   border-radius: 4px;
   margin: 0 auto;
   position: absolute;
@@ -12,7 +12,7 @@
   right: 0;
   bottom: 0;
   background-color: #f3f4f6;
-  padding: 66px 16px 32px;
+  padding: 66px 16px 0;
   overflow: hidden;
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Chrome/Safari/Opera */
@@ -25,5 +25,11 @@
     width: 1439px;
     margin: 0 auto;
     overflow: auto;
+    flex-grow: 1;
+  }
+  .copyright {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
   }
 }

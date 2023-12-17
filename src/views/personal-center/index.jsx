@@ -1,135 +1,97 @@
-import { IdcardOutlined, LikeTwoTone, MailOutlined, StarTwoTone } from '@ant-design/icons'
+import { LikeTwoTone, StarTwoTone } from '@ant-design/icons'
 import { Menu } from 'antd'
-import PubSub from 'pubsub-js'
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import CollectionBag from './components/collection-bag'
 import GoodBag from './components/good-bag'
 import './index.less'
 
-export default class PersonalCenter extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      currentKeyMap: 0, //选中的menu
-      userName: '', //姓名
-      intervieweEamil: '', //邮箱
-      headImg: '', //头像
-      department: '', //部门
-      practiceAmount: 0, //练题数
-      inputAmount: 0, //录题数
-      goodAmount: 0, //点赞数
-      collectionAmount: 0, //收藏数
-      subMenuList: []
-    }
+const personList = {
+  0: '收藏',
+  1: '点赞'
+}
+
+const PersonalCenter = props => {
+  const [currentKeyMap, setCurrentKeyMap] = useState(0)
+  const { userInfo } = useSelector(store => store.userInfo)
+  const [selectedKeys, setSelectedKeys] = useState('0')
+
+  const { tab } = useParams()
+
+  useEffect(() => {
+    setCurrentKeyMap(+tab)
+    setSelectedKeys(tab)
+  }, [tab])
+
+  const handleClick = ({ key }) => {
+    setCurrentKeyMap(Number(key))
+    setSelectedKeys(key)
   }
-  personList = {
-    // 0: '刷题',
-    0: '收藏',
-    1: '点赞'
-  }
-  componentDidMount() {
-    PubSub.subscribe('handleToRender', () => {
-      this.setState({})
-    })
-  }
-  /**
-   * 切换菜单
-   * @param {*} e
-   */
-  handleClick = e => {
-    console.log('--------', e)
-    //截取_后的字符
-    let index = e.keyPath[0].lastIndexOf('_')
-    let index2 = e.keyPath[0].substring(index + 1, e.keyPath[0].length)
-    //
-    console.log('index2>>>>', index2)
-    this.setState({
-      currentKeyMap: Number(index2)
-    })
-  }
-  render() {
-    let {
-      headImg,
-      userName,
-      intervieweEamil,
-      department,
-      goodAmount,
-      collectionAmount,
-      practiceAmount,
-      inputAmount
-    } = this.state
-    const { currentKeyMap } = this.state
-    return (
-      <div className='personal-center-box'>
-        <div className='personal-center-introduction'>
-          <div className='personal-center-introduction-detail'>
-            <div className='personal-center-introduction-detail-headImg'>
-              <img src={headImg} style={{ width: 60, height: 60, borderRadius: '50%' }} />
-            </div>
-            <div className='personal-center-introduction-detail-text'>
-              <div className='personal-center-introduction-detail-name'>{userName}</div>
-              <div className='personal-center-introduction-detail-information'>
-                <span className='personal-center-introduction-detail-information-content'>
-                  <IdcardOutlined style={{ color: 'blue', marginRight: '3px' }} />
-                </span>
-                <span className='personal-center-introduction-detail-information-content'>
-                  <MailOutlined style={{ color: 'blue', marginRight: '3px' }} />
-                </span>
-              </div>
-            </div>
+
+  return (
+    <div className='personal-center-box'>
+      <div className='personal-center-introduction'>
+        <div className='personal-center-introduction-detail'>
+          <div className='personal-center-introduction-detail-headImg'>
+            <img src={userInfo.avatar} style={{ width: 60, height: 60, borderRadius: '50%' }} />
           </div>
-          <div className='personal-center-introduction-result'>
-            <div className='personal-center-introduction-result-item'>
-              <div className='personal-center-introduction-result-item-number'>
-                {practiceAmount}
-              </div>
-              <div>练题</div>
-            </div>
-            <div className='personal-center-introduction-result-item'>
-              <div className='personal-center-introduction-result-item-number'>{inputAmount}</div>
-              <div>录题</div>
-            </div>
-            <div className='personal-center-introduction-result-item'>
-              <div className='personal-center-introduction-result-item-number'>{goodAmount}</div>
-              <div>点赞</div>
-            </div>
-            <div className='personal-center-introduction-result-item'>
-              <div className='personal-center-introduction-result-item-number'>
-                {collectionAmount}
-              </div>
-              <div>收藏</div>
-            </div>
+          <div className='personal-center-introduction-detail-text'>
+            <div className='personal-center-introduction-detail-name'>{userInfo.nickName}</div>
+            {/* <div className='personal-center-introduction-detail-information'>
+              <span className='personal-center-introduction-detail-information-content'>
+                <IdcardOutlined style={{ color: 'blue', marginRight: '3px' }} />
+              </span>
+              <span className='personal-center-introduction-detail-information-content'>
+                <MailOutlined style={{ color: 'blue', marginRight: '3px' }} />
+              </span>
+            </div> */}
           </div>
         </div>
-        <div className='personal-center-content'>
-          <div className='personal-center-content-left'>
-            <Menu
-              mode='inline'
-              onClick={this.handleClick}
-              style={{ width: 256 }}
-              defaultSelectedKeys={['personList_0']}
-            >
-              {/* <Menu.Item key={`personList_0`}>
-                <MailOutlined style={{ color: 'rgb(171,214,97)' }} />
-                <span>{this.personList[0]}</span>
-              </Menu.Item> */}
-              <Menu.Item key={`personList_0`}>
-                <StarTwoTone twoToneColor='rgb(252,132,67)' />
-                <span>{this.personList[0]}</span>
-              </Menu.Item>
-              <Menu.Item key={`personList_1`}>
-                <LikeTwoTone twoToneColor='#99bbff' />
-                <span>{this.personList[1]}</span>
-              </Menu.Item>
-            </Menu>
+        <div className='personal-center-introduction-result'>
+          {/* <div className='personal-center-introduction-result-item'>
+            <div className='personal-center-introduction-result-item-number'>{10}</div>
+            <div>练题</div>
+          </div> */}
+          {/* <div className='personal-center-introduction-result-item'>
+            <div className='personal-center-introduction-result-item-number'>{inputAmount}</div>
+            <div>录题</div>
+          </div> */}
+          <div className='personal-center-introduction-result-item'>
+            <div className='personal-center-introduction-result-item-number'>{20}</div>
+            <div>点赞</div>
           </div>
-          <div className='personal-center-content-right'>
-            {/* {currentKeyMap === 0 && <BrushQuestion />} */}
-            {currentKeyMap === 0 && <CollectionBag />}
-            {currentKeyMap === 1 && <GoodBag />}
+          <div className='personal-center-introduction-result-item'>
+            <div className='personal-center-introduction-result-item-number'>{30}</div>
+            <div>收藏</div>
           </div>
         </div>
       </div>
-    )
-  }
+      <div className='personal-center-content'>
+        <div className='personal-center-content-left'>
+          <Menu
+            mode='inline'
+            onClick={handleClick}
+            style={{ width: 256 }}
+            selectedKeys={[selectedKeys]}
+          >
+            <Menu.Item key={0}>
+              <StarTwoTone twoToneColor='rgb(252,132,67)' />
+              <span>{personList[0]}</span>
+            </Menu.Item>
+            <Menu.Item key={1}>
+              <LikeTwoTone twoToneColor='#99bbff' />
+              <span>{personList[1]}</span>
+            </Menu.Item>
+          </Menu>
+        </div>
+        <div className='personal-center-content-right'>
+          {currentKeyMap === 0 && <CollectionBag />}
+          {currentKeyMap === 1 && <GoodBag />}
+        </div>
+      </div>
+    </div>
+  )
 }
+
+export default PersonalCenter

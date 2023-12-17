@@ -2,16 +2,9 @@ import req from '@utils/request'
 import { Card, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import BatchleBox from './pages/batch-box'
 import SingleBox from './pages/single-box'
 
 import './index.less'
-const tabList = [
-  {
-    key: 'singleBox',
-    tab: '单题录入'
-  }
-]
 const UploadQuestions = () => {
   const [currentKey, setCurrentKey] = useState('singleBox')
   const navigate = useNavigate()
@@ -41,23 +34,18 @@ const UploadQuestions = () => {
     })
   }, [])
 
-  const contentList = {
-    singleBox: <SingleBox />,
-    batchBox: <BatchleBox />
-  }
-
   return (
     <div className='upload-questions-box'>
       <Card
         style={{ width: '100%' }}
-        tabList={tabList}
+        title='题目录入'
         bordered={false}
         activeTabKey={currentKey}
         onTabChange={key => {
           setCurrentKey(key)
         }}
       >
-        {contentList[currentKey]}
+        <SingleBox />
       </Card>
     </div>
   )

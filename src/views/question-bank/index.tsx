@@ -31,7 +31,6 @@ const QuestionBank = () => {
    * @param {*} assembleIds 三级标签 assembleIds
    */
   const onChangeLabel = values => {
-    console.log(values)
     setSelectedValue(values)
     setQuestionList([])
     setTotal(0)

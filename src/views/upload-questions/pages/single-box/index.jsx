@@ -1,9 +1,10 @@
+import { RightOutlined } from '@ant-design/icons'
+import { Button, Space } from 'antd'
 import React, { Component } from 'react'
 import BriefQuestions from '../../components/brief-questions'
 import JudgeQuestions from '../../components/judge-questions'
 import MultipleQuestions from '../../components/multiple-questions'
 import SingleQuestions from '../../components/single-questions'
-import UploadLeftLayout from '../../components/upload-left-layout'
 import { uploadLayout } from '../../constant'
 
 import './index.less'
@@ -40,16 +41,6 @@ export default class SingleBox extends Component {
     })
   }
 
-  render() {
-    const { currentIndex, layoutList } = this.state
-    return (
-      <div style={{ display: 'flex' }}>
-        <UploadLeftLayout layoutList={layoutList} onChange={this.onChangeQuestionsType} />
-        <div className='upload-questions-modular'>{this.changeReander(currentIndex)}</div>
-      </div>
-    )
-  }
-
   changeReander = i => {
     switch (i) {
       case 0:
@@ -61,5 +52,33 @@ export default class SingleBox extends Component {
       case 3:
         return <JudgeQuestions questionsType={i + 1} key={`question_${i}`} />
     }
+  }
+
+  render() {
+    const { currentIndex, layoutList } = this.state
+    return (
+      <div style={{ display: 'flex' }}>
+        {/* <UploadLeftLayout layoutList={layoutList} onChange={this.onChangeQuestionsType} /> */}
+        <div style={{ flex: 1 }}>
+          <Space direction='vertical'>
+            {layoutList.map((item, index) => {
+              return (
+                <Button
+                  key={item.id}
+                  type={item.active ? 'primary' : 'default'}
+                  ghost={item.active}
+                  block
+                  onClick={() => this.onChangeQuestionsType(index)}
+                >
+                  {item.title}
+                  <RightOutlined style={{ marginLeft: 54 }} />
+                </Button>
+              )
+            })}
+          </Space>
+        </div>
+        <div className='upload-questions-modular'>{this.changeReander(currentIndex)}</div>
+      </div>
+    )
   }
 }
