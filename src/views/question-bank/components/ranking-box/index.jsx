@@ -29,16 +29,24 @@ export default function RankingBox(props) {
     }
     // props.onHandleJump && props.onHandleJump()
   })
-  const tabList = [
-    {
-      tab: '本月排行',
-      key: 'month'
-    },
-    {
-      tab: '总榜',
-      key: 'total'
-    }
-  ]
+  const tabList =
+    rankingType === 1
+      ? [
+          {
+            tab: '本月排行',
+            key: 'month'
+          },
+          {
+            tab: '总榜',
+            key: 'total'
+          }
+        ]
+      : [
+          {
+            tab: '总榜',
+            key: 'total'
+          }
+        ]
   // 获得当前下标的数据
   let rankingList = contributionList || []
 
@@ -79,24 +87,24 @@ export default function RankingBox(props) {
                       {index > 2 && index + 1}
                     </div>
                     <div className='ranking-head-img'>
-                      <img src={item.headImg} className='ranking-head-icon' />
+                      <img src={item.createUserAvatar} className='ranking-head-icon' />
                     </div>
                     <Popover
-                      title={<div>{item.name}</div>}
+                      title={<div>{item.createUser}</div>}
                       content={
                         <div className='tooltip-info'>
-                          <div>{item.name}</div>
+                          <div>{item.createUser}</div>
                           {/* <div>{item.organizationFullName}</div> */}
                         </div>
                       }
                     >
                       <div className='ranking-info'>
-                        <div className='ranking-name'>{item.name}</div>
+                        <div className='ranking-name'>{item.createUser}</div>
                         {/* <div className="ranking-department">{item.organizationName}</div> */}
                       </div>
                     </Popover>
                   </div>
-                  <div className='ranking-right'>🔥 {item.count}</div>
+                  <div className='ranking-right'>🔥 {item.subjectCount}</div>
                 </div>
               )
             })}

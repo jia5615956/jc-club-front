@@ -23,8 +23,9 @@ const LabelList = props => {
     })
       .then(res => {
         if (res.data && res.data.length > 0) {
-          const ids = `${res.data[0].id}_${res.data[0].labelDTOList[0].id}`
-          setCategoryAndLabelList(res.data)
+          const filterData = [...res.data].filter(item => item?.labelDTOList?.length > 0)
+          const ids = `${filterData[0].id}_${filterData[0].labelDTOList[0].id}`
+          setCategoryAndLabelList(filterData)
           setCheckedLabelId(ids)
           changeLabel(ids)
         } else {
@@ -32,10 +33,8 @@ const LabelList = props => {
           setCheckedLabelId('')
           changeLabel('')
         }
-        // setSpinning(false)
       })
       .catch(err => {
-        // setSpinning(false)
         console.log(err)
       })
   }

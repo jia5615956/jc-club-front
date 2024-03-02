@@ -66,7 +66,7 @@ const Login = () => {
         <div className='qrcode-box'>
           <div className='qrcode-desc'>
             <p>微信扫码关注公众号</p>
-            <p>获取验证码登录</p>
+            <p>公众号发送 “验证码”开启加薪之路</p>
           </div>
           <div className='qrcode-img'>
             <img src={LoginQrcode} alt='' />

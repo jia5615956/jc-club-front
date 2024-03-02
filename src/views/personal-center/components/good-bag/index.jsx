@@ -1,3 +1,4 @@
+import req from '@utils/request'
 import { Card, Pagination, Spin } from 'antd'
 import React, { Component } from 'react'
 import { goodTabType } from '../../constant'
@@ -53,23 +54,47 @@ export default class GoodBag extends Component {
    * 获取一级分类数据
    */
   getGoodList() {
-    this.total = 3
-    this.setState({
-      goodList: [
-        {
-          id: 100,
-          subjectName: 'Redis支持哪几种数据类型？'
-        },
-        {
-          id: 101,
-          subjectName: 'Redis的高级数据类型有什么？'
-        },
-        {
-          id: 102,
-          subjectName: 'Redis的优点有什么？'
+    req(
+      {
+        method: 'post',
+        url: '/subjectLiked/getSubjectLikedPage',
+        data: {
+          pageNo: 1,
+          pageSize: 10
         }
-      ]
+      },
+      '/subject'
+    ).then(res => {
+      if (res.success && res.code === 200) {
+        this.total = res.data?.total || 0
+        this.setState({
+          goodList: res.data.result
+        })
+      } else {
+        this.total = 0
+        this.setState({
+          goodList: []
+        })
+      }
     })
+
+    // this.total = 3
+    // this.setState({
+    //   goodList: [
+    //     {
+    //       id: 100,
+    //       subjectName: 'Redis支持哪几种数据类型？'
+    //     },
+    //     {
+    //       id: 101,
+    //       subjectName: 'Redis的高级数据类型有什么？'
+    //     },
+    //     {
+    //       id: 102,
+    //       subjectName: 'Redis的优点有什么？'
+    //     }
+    //   ]
+    // })
   }
 
   /**

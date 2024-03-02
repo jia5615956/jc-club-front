@@ -14,7 +14,8 @@ export default function request(config, url) {
     withCredentials: true, // send cookies when cross-domain requests
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
-      [userInfo.tokenName]: 'jichi ' + userInfo.tokenValue
+      [userInfo.tokenName]: 'jichi ' + userInfo.tokenValue,
+      loginId: userInfo.loginId || ''
     }
   })
 

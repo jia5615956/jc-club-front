@@ -1,20 +1,19 @@
-import { Pagination, Button, Modal, Input, Radio, message } from 'antd'
-import React, { Component, Fragment, useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
 import GoodCollectionError from '@components/good-collection-error'
-import './index.less'
 import req from '@utils/request'
+import { Pagination } from 'antd'
+import { Component, Fragment, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import './index.less'
 
 const grade: Record<string, string> = {
   1: '初级',
   2: '中级',
   3: '高级',
   4: '资深',
-  5: '专家',
+  5: '专家'
 }
 
 const BrushQuestions = () => {
-
   const { id } = useParams()
   const [question, setQuestion] = useState<Record<string, any>>(null)
   const [index, setIndex] = useState(1)
@@ -26,51 +25,49 @@ const BrushQuestions = () => {
       data: {
         id
       },
-      url: '/querySubjectInfo',
+      url: '/querySubjectInfo'
     })
-      .then((res) => {
+      .then(res => {
         if (res.success && res.data) {
           setQuestion(res.data)
         }
       })
-      .catch((err) => console.log(err))
+      .catch(err => console.log(err))
   }, [id])
 
   return (
-    <div className="brush-questions-box">
-      <div className="question-box">
-        <div className="question">
-          <div className="question-type">
-            <div className="number">{index}</div>
-            <div className="type">问答题</div>
+    <div className='brush-questions-box'>
+      <div className='question-box'>
+        <div className='question'>
+          <div className='question-type'>
+            <div className='number'>{index}</div>
+            <div className='type'>问答题</div>
           </div>
         </div>
       </div>
-      {
-        question ? <Fragment>
-          <div className="question-content">
-            <div className="difficulty">
+      {question ? (
+        <Fragment>
+          <div className='question-content'>
+            <div className='difficulty'>
               {grade[question.subjectDifficult]}-{question?.labelName.join('、')}
             </div>
             <div>{question.subjectName}</div>
           </div>
-          <div className="answer-box">
-            <div className="reference-answer">参考答案</div>
+          <div className='answer-box'>
+            <div className='reference-answer'>参考答案</div>
             <div
-              className="answer-content wang-editor-style"
+              className='answer-content wang-editor-style'
               dangerouslySetInnerHTML={{
-                __html: question.subjectAnswer,
+                __html: question.subjectAnswer
               }}
             ></div>
             <br />
           </div>
-          <div className="change-question-box">
-            <GoodCollectionError
-              questionId={question.id}
-            />
+          <div className='change-question-box'>
+            <GoodCollectionError detail={question} />
           </div>
-        </Fragment> : null
-      }
+        </Fragment>
+      ) : null}
     </div>
   )
 }
@@ -84,16 +81,22 @@ class BrushQuestions1 extends Component {
       isGood: 0,
       isCollection: 0,
       index: 1,
-      question: [{
-        id: 1, labelNames: ["原理"], subjectName: 'JDK 和 JRE 有什么区别？', difficulty: 1,
-        subjectAnswer: `<p>JDK：Java Development Kit 的简称，Java 开发工具包，提供了 Java 的开发环境和运行环境。</p>
+      question: [
+        {
+          id: 1,
+          labelNames: ['原理'],
+          subjectName: 'JDK 和 JRE 有什么区别？',
+          difficulty: 1,
+          subjectAnswer: `<p>JDK：Java Development Kit 的简称，Java 开发工具包，提供了 Java 的开发环境和运行环境。</p>
           <p>JRE：Java Runtime Environment 的简称，Java 运行环境，为 Java 的运行提供了所需环境。</p>
           <p>具体来说 JDK 其实包含了 JRE，同时还包含了编译 Java 源码的编译器 Javac，还包含了很多 Java 程序调试和分析的工具。</p>
-          <p>简单来说：如果你需要运行 Java 程序，只需安装 JRE 就可以了，如果你需要编写 Java 程序，需要安装 JDK。</p>` }],
+          <p>简单来说：如果你需要运行 Java 程序，只需安装 JRE 就可以了，如果你需要编写 Java 程序，需要安装 JDK。</p>`
+        }
+      ],
       // answer: '',
       isModal: false, //是否显示纠错弹框
       value: 1, //纠错类型对应值
-      inputValue: '', //纠错详情内容
+      inputValue: '' //纠错详情内容
     }
   }
   pageIndex = 1
@@ -106,7 +109,7 @@ class BrushQuestions1 extends Component {
     2: '中级',
     3: '高级',
     4: '资深',
-    5: '专家',
+    5: '专家'
   }
   goodCollectionError = GoodCollectionError | null
   componentDidMount() {
@@ -127,23 +130,23 @@ class BrushQuestions1 extends Component {
     let params = {
       pageInfo: {
         pageIndex: this.pageIndex,
-        pageSize: 1,
+        pageSize: 1
       },
       difficulty: this.difficulty,
       primaryCategoryId: this.primaryCategoryId,
-      assembleIds: this.assembleIds,
+      assembleIds: this.assembleIds
     }
     return await req({
       method: 'post',
       data: params,
-      url: '/querySubjectInfo',
+      url: '/querySubjectInfo'
     })
-      .then((res) => {
+      .then(res => {
         if (res.data && res.data?.pageList?.length > 0) {
           this.total = res.data.pageInfo.total
           this.setState(
             {
-              question: res.data.pageList,
+              question: res.data.pageList
             },
             () => {
               this.goodCollectionError.getDetail()
@@ -151,21 +154,21 @@ class BrushQuestions1 extends Component {
           )
         }
       })
-      .catch((err) => console.log(err))
+      .catch(err => console.log(err))
   }
 
-  onChangePagination = async (pageIndex) => {
+  onChangePagination = async pageIndex => {
     this.pageIndex = pageIndex
     this.setState({ index: pageIndex })
     // await this.getInterviewSubjectList()
   }
 
-  handleNextQuestion = async (value) => {
+  handleNextQuestion = async value => {
     let { index } = this.state
     this.pageIndex += value
     index += value
     this.setState({
-      index: index,
+      index: index
     })
     // await this.getInterviewSubjectList()
   }
@@ -173,12 +176,12 @@ class BrushQuestions1 extends Component {
   render() {
     const { index, question } = this.state
     return (
-      <div className="brush-questions-box">
-        <div className="question-box">
-          <div className="question">
-            <div className="question-type">
-              <div className="number">{index}</div>
-              <div className="type">问答题</div>
+      <div className='brush-questions-box'>
+        <div className='question-box'>
+          <div className='question'>
+            <div className='question-type'>
+              <div className='number'>{index}</div>
+              <div className='type'>问答题</div>
             </div>
             {/* <div className="question-number">
               <div className="now-number">{index}</div>
@@ -190,27 +193,27 @@ class BrushQuestions1 extends Component {
           {question.map((item, index) => {
             return (
               <div key={index}>
-                <div className="question-content">
-                  <div className="difficulty">
+                <div className='question-content'>
+                  <div className='difficulty'>
                     {this.grade[item.difficulty]}-{item.labelNames.join('、')}
                   </div>
                   <div>{item.subjectName}</div>
                 </div>
-                <div className="answer-box">
-                  <div className="reference-answer">参考答案</div>
+                <div className='answer-box'>
+                  <div className='reference-answer'>参考答案</div>
                   <div
-                    className="answer-content wang-editor-style"
+                    className='answer-content wang-editor-style'
                     dangerouslySetInnerHTML={{
                       // __html: item.subjectAnswer,
-                      __html: item.subjectAnswer,
+                      __html: item.subjectAnswer
                     }}
                   ></div>
                   <br />
                 </div>
-                <div className="change-question-box">
+                <div className='change-question-box'>
                   <GoodCollectionError
                     questionId={question[0].id}
-                    ref={(ref) => {
+                    ref={ref => {
                       this.goodCollectionError = ref
                     }}
                   />
@@ -241,12 +244,12 @@ class BrushQuestions1 extends Component {
           })}
         </Fragment>
 
-        <div className="jump-question">
+        <div className='jump-question'>
           {this.total > 0 && (
             <Pagination
               style={{
                 padding: '24px 0',
-                textAlign: 'center',
+                textAlign: 'center'
               }}
               showQuickJumper
               current={this.pageIndex}

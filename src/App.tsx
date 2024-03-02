@@ -38,7 +38,9 @@ const App = () => {
   }
 
   useEffect(() => {
-    getUserInfo()
+    if (location.pathname !== '/login' && loginId) {
+      getUserInfo()
+    }
   }, [])
 
   useEffect(() => {

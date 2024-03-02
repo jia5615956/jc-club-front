@@ -24,12 +24,12 @@ const CollectionQuestion = props => {
         return (
           <div
             className='collection-bag-component-tab1-body-item'
-            key={`collection_question_${item.id}`}
+            key={`collection_question_${item.subjectId}`}
           >
             <div className='collection-bag-component-tab1-body-item-question'>
               <span
                 className='collection-bag-component-tab1-body-item-question-content'
-                onClick={() => handleJump(item.id)}
+                onClick={() => handleJump(item.subjectId)}
               >
                 {item.subjectName}
               </span>

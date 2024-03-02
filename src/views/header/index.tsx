@@ -1,5 +1,5 @@
 import Logo from '@/imgs/logo.jpg'
-import { HeartOutlined, LikeOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons'
+import { LikeOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons'
 import TopMenu from '@components/top-menu'
 import LoginQrcode from '@imgs/personal_qr_code.jpg'
 import req from '@utils/request'
@@ -18,12 +18,12 @@ const menuItems = [
     icon: <UserOutlined style={{ fontSize: '16px' }} />,
     path: '/user-info'
   },
-  {
-    label: '我的收藏',
-    key: 2,
-    icon: <HeartOutlined style={{ fontSize: '16px' }} />,
-    path: '/personal-center/0'
-  },
+  // {
+  //   label: '我的收藏',
+  //   key: 2,
+  //   icon: <HeartOutlined style={{ fontSize: '16px' }} />,
+  //   path: '/personal-center/0'
+  // },
   {
     label: '我的点赞',
     key: 3,
