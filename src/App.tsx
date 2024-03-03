@@ -60,7 +60,7 @@ const App = () => {
       <Header />
       <div
         className='content-box'
-        style={{ width: location.pathname === '/login' ? '100%' : '1439px' }}
+        style={{ width: location.pathname === '/login' ? '100%' : '1200px' }}
       >
         <Suspense fallback={<div></div>}>
           <Outlet />

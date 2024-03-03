@@ -132,8 +132,8 @@ const QuestionBank = () => {
         </div>
       </div>
       <div className='ranking-box'>
-        <ContributionList />
         <RankingList />
+        <ContributionList />
       </div>
     </div>
   )
