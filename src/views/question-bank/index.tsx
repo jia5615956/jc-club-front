@@ -4,7 +4,7 @@ import QuestionList from '@components/question-list'
 import req from '@utils/request'
 import { memo, useEffect, useState } from 'react'
 import ContributionList from './components/contribution-list'
-import RankingList from './components/practice-list'
+import PracticeList from './components/practice-list'
 import { apiName } from './constant'
 import './index.less'
 
@@ -132,8 +132,8 @@ const QuestionBank = () => {
         </div>
       </div>
       <div className='ranking-box'>
-        <RankingList />
         <ContributionList />
+        <PracticeList />
       </div>
     </div>
   )

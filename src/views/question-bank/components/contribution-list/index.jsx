@@ -1,6 +1,6 @@
 import req from '@utils/request'
 import { message } from 'antd'
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RankingType, apiName } from '../../constant'
 import { mockRankingModuleList } from '../../mock'
@@ -23,19 +23,19 @@ const ContributionList = props => {
     })
       .then(res => {
         if (res.data && res.data.length > 0) {
-          this.setState({
-            contributionList: res.data,
-            isLoading: false
-          })
+          setLoading(false)
+          setContributionList(res.data)
         } else {
-          this.setState({
-            contributionList: [],
-            isLoading: false
-          })
+          setLoading(false)
+          setContributionList([])
         }
       })
       .catch(err => console.log(err))
   }
+
+  useEffect(() => {
+    getContributeList()
+  }, [])
 
   /**
    * 切换排行榜

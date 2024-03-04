@@ -15,7 +15,7 @@ export const apiName = {
   /**
    * 练题排行榜
    */
-  getPracticeRankList: '/getContributeList'
+  getContributeList: '/getContributeList'
 }
 
 /**
@@ -36,14 +36,14 @@ export const RankingType = {
  * 模块名称
  */
 export const RankingTypeText = {
-  [RankingType.contribution]: '综合练习榜',
-  [RankingType.practice]: '出题贡献榜'
+  [RankingType.practice]: '综合练习榜',
+  [RankingType.contribution]: '出题贡献榜'
 }
 
 /**
  * 对应按钮名字
  */
 export const RankingTypeBtnText = {
-  [RankingType.contribution]: '去练习',
-  [RankingType.practice]: '去出题'
+  [RankingType.contribution]: '去出题',
+  [RankingType.practice]: '去练习'
 }

@@ -3,6 +3,7 @@ import React, { Component, Fragment } from 'react'
 import { RankingType, apiName } from '../../constant'
 import { mockRankingModuleList } from '../../mock'
 import RankingBox from '../ranking-box'
+// import {} from 'react-router-dom'
 
 class PracticeList extends Component {
   constructor(props) {
@@ -15,7 +16,7 @@ class PracticeList extends Component {
   }
 
   componentDidMount() {
-    this.getPracticeRankList()
+    // this.getPracticeRankList()
   }
 
   /**
@@ -48,7 +49,6 @@ class PracticeList extends Component {
    * @returns
    */
   onChangeRanking = index => {
-    console.log(index, 'practice index')
     this.setState({
       contributeType: index
     })
@@ -58,7 +58,7 @@ class PracticeList extends Component {
    * 去练题
    */
   onChangeJump = () => {
-    this.props.history.push('/practice-questions')
+    window.open('/practice-questions', '_blank')
   }
 
   render() {

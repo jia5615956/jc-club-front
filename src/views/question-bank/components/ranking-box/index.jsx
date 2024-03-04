@@ -30,7 +30,7 @@ export default function RankingBox(props) {
     // props.onHandleJump && props.onHandleJump()
   })
   const tabList =
-    rankingType === 1
+    rankingType === 2
       ? [
           {
             tab: '本月排行',
