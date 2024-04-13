@@ -32,11 +32,14 @@ export default class AnswerAnalysis extends Component {
     let params = {
       practiceId: practiceId
     }
-    req({
-      method: 'post',
-      data: params,
-      url: ApiName.getScoreDetail
-    })
+    req(
+      {
+        method: 'post',
+        data: params,
+        url: ApiName.getScoreDetail
+      },
+      '/practice'
+    )
       .then(res => {
         if (res?.data && res?.data?.length > 0) {
           this.setState(
@@ -64,11 +67,14 @@ export default class AnswerAnalysis extends Component {
       subjectId: subjectItem.subjectId,
       subjectType: subjectItem.subjectType
     }
-    JDreq({
-      method: 'post',
-      data: params,
-      url: ApiName.getSubjectDetail
-    })
+    req(
+      {
+        method: 'post',
+        data: params,
+        url: ApiName.getSubjectDetail
+      },
+      '/practice'
+    )
       .then(res => {
         if (res.data) {
           let respondAnswer = res.data.respondAnswer

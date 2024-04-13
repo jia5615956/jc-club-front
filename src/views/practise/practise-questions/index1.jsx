@@ -8,12 +8,37 @@ import './index.less'
 
 const { SubMenu } = Menu
 
+function getItem(label, key, icon, children) {
+  return {
+    key,
+    icon,
+    children,
+    label
+  }
+}
+
 export default class PracticeQuestions extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      currentKey: '', // 选中的menu
-      subMenuList: []
+      currentKey: '1', // 选中的menu
+      subMenuList: [
+        {
+          title: '模拟套卷',
+          menuId: '1',
+          menuType: 1
+        },
+        {
+          title: '模拟套卷',
+          detailVOS: [
+            {
+              menuName: '后端',
+              menuId: '10',
+              menuType: 2
+            }
+          ]
+        }
+      ]
     }
   }
 
@@ -28,7 +53,7 @@ export default class PracticeQuestions extends Component {
   currentKeyFirstMenuType = 1
 
   componentDidMount() {
-    this.getPracticeMenu()
+    // this.getPracticeMenu()
   }
 
   /**
@@ -123,7 +148,7 @@ export default class PracticeQuestions extends Component {
                       title={subMenuItem.title}
                       icon={<MailOutlined />}
                     >
-                      {subMenuItem?.detailVOS?.length > 0 &&
+                      {subMenuItem?.detailVOS?.length > 0 ? (
                         subMenuItem?.detailVOS?.map(menuItem => {
                           return (
                             <Menu.Item key={menuItem.menuId}>
@@ -131,7 +156,13 @@ export default class PracticeQuestions extends Component {
                               {menuItem.menuName}
                             </Menu.Item>
                           )
-                        })}
+                        })
+                      ) : (
+                        <Menu.Item key={subMenuItem.menuId}>
+                          {/* {subMenuItem.menuType == 1 ? 'GRADE ' : ''} */}
+                          {/* {subMenuItem.menuName} */}
+                        </Menu.Item>
+                      )}
                     </SubMenu>
                   )
                 })}

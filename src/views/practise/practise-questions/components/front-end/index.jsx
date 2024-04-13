@@ -85,7 +85,7 @@ class FrontEnd extends Component {
       .then(res => {
         if (res.data) {
           this.props.history.push(
-            splicingQuery('/practice-details', {
+            splicingQuery('/practise-details', {
               setId: res.data.setId
             })
           )

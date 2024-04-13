@@ -22,7 +22,7 @@ const ContributionList = props => {
       url: apiName.getContributeList
     })
       .then(res => {
-        if (res.data && res.data.length > 0) {
+        if (res.success && res.data) {
           setLoading(false)
           setContributionList(res.data)
         } else {

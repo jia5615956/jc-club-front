@@ -4,7 +4,7 @@ import QuestionList from '@components/question-list'
 import req from '@utils/request'
 import { memo, useEffect, useState } from 'react'
 import ContributionList from './components/contribution-list'
-import PracticeList from './components/practice-list'
+import PracticeList from './components/practise-list'
 import { apiName } from './constant'
 import './index.less'
 

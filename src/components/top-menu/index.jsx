@@ -13,7 +13,7 @@ const MENULIST = [
   {
     key: 'prictiseQuestion',
     title: '练题',
-    route: '/practice-questions',
+    route: '/practise-questions',
     finished: true
   },
   {

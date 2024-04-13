@@ -1,8 +1,8 @@
 // import req from '@utils/request'
-import { Card, Input, Pagination, Spin, Tooltip } from 'antd'
-import React, { useState } from 'react'
+import req from '@utils/request'
+import { Card, Empty, Input, Pagination, Spin, Tooltip } from 'antd'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
 import './index.less'
 
 const { Search } = Input
@@ -23,53 +23,51 @@ const tabList = [
 ]
 
 const PaperView = props => {
+  const { type } = props
   const navigate = useNavigate()
 
   const [spinning, setSpinning] = useState(false)
-  const [paperList, setPaperList] = useState([
-    {
-      setId: 1,
-      setName: '测试试卷',
-      setHeat: 1,
-      setDesc: '描述'
-    }
-  ])
+  const [paperList, setPaperList] = useState([])
   const [orderType, setOrderType] = useState(0)
-  const [setId, setSetId] = useState(0)
   const [pageInfo, setPageInfo] = useState({
     total: 0,
     pageIndex: 1
   })
   const [searchText, setSearchText] = useState('')
+
+  useEffect(() => {
+    getPreSetContent()
+  }, [props.type])
+
   const getPreSetContent = () => {
-    // const { menuId, menuType } = this.props
-    // const { orderType, searchText } = this.state
-    // let params = {
-    //   menuId: menuId,
-    //   menuType: menuType,
-    //   orderType: orderType,
-    //   pageInfo: {
-    //     pageIndex: this.pageIndex,
-    //     pageSize: 8
-    //   },
-    //   setName: searchText
-    // }
-    // req({
-    //   method: 'post',
-    //   data: params,
-    //   url: 'admin/practice/set/getPreSetContent'
-    // })
-    //   .then(res => {
-    //     if (res.data.pageList && res.data.pageList?.length > 0) {
-    //       this.setState({
-    //         paperList: res.data.pageList,
-    //         total: res.data.pageInfo.total,
-    //         isShowSpin: false,
-    //         setId: res.data.pageList.setId
-    //       })
-    //     }
-    //   })
-    //   .catch(err => console.log(err))
+    let api = '/practice/set/getPreSetContent'
+    if (type === 'unfinish') {
+      api = '/practice/set/getUnCompletePractice'
+    }
+    let params = {
+      pageInfo: {
+        pageNo: pageInfo.pageIndex,
+        pageSize: 8
+      }
+    }
+    req(
+      {
+        method: 'post',
+        data: params,
+        url: api
+      },
+      '/practice'
+    )
+      .then(res => {
+        if (res.success) {
+          setPageInfo({
+            ...pageInfo,
+            total: res.data.total
+          })
+          setPaperList(res.data.result || [])
+        }
+      })
+      .catch(err => console.log(err))
   }
 
   const onTabChange = key => {
@@ -83,7 +81,7 @@ const PaperView = props => {
     })
   }
 
-  const handleJump = setId => navigate('/practice-detail/' + setId)
+  const handleJump = setId => navigate('/practise-detail/' + setId)
 
   const onSearch = value => {
     setSearchText(value)
@@ -108,7 +106,7 @@ const PaperView = props => {
             onTabChange={onTabChange}
           >
             <div className='ant-card-body'>
-              {paperList?.length > 0 &&
+              {paperList?.length > 0 ? (
                 paperList.map((item, index) => {
                   return (
                     <div
@@ -127,7 +125,10 @@ const PaperView = props => {
                       </div>
                     </div>
                   )
-                })}
+                })
+              ) : (
+                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+              )}
             </div>
           </Card>
         </div>

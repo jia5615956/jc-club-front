@@ -50,6 +50,8 @@ export default function RankingBox(props) {
   // 获得当前下标的数据
   let rankingList = contributionList || []
 
+  console.log(rankingList, 'rank list ')
+
   return (
     <div className='ranking-list-box'>
       <div className='ranking-list-header'>

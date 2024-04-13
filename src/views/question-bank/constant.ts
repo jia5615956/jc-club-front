@@ -13,9 +13,12 @@ export const apiName = {
   getSubjectPage: '/getSubjectPage',
 
   /**
-   * 练题排行榜
+   * 贡献榜
    */
-  getContributeList: '/getContributeList'
+  getContributeList: '/getContributeList',
+
+  // 练题榜
+  getPracticeRankList: '/practice/detail/getPracticeRankList'
 }
 
 /**

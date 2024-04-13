@@ -44,6 +44,10 @@ export default ({ mode }) => {
         '/oss': {
           target: env.VITE_API_HOST,
           changeOrigin: true
+        },
+        '/practice': {
+          target: env.VITE_API_HOST,
+          changeOrigin: true
         }
       }
     }

@@ -1,7 +1,6 @@
 import req from '@utils/request'
 import React, { Component, Fragment } from 'react'
 import { RankingType, apiName } from '../../constant'
-import { mockRankingModuleList } from '../../mock'
 import RankingBox from '../ranking-box'
 // import {} from 'react-router-dom'
 
@@ -9,26 +8,29 @@ class PracticeList extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      contributionList: mockRankingModuleList[0].rankingList,
+      contributionList: [],
       contributeType: 0,
       isLoading: false
     }
   }
 
   componentDidMount() {
-    // this.getPracticeRankList()
+    this.getPracticeRankList()
   }
 
   /**
    * 获得练习榜
    */
   getPracticeRankList() {
-    req({
-      method: 'post',
-      url: apiName.getPracticeRankList
-    })
+    req(
+      {
+        method: 'post',
+        url: apiName.getPracticeRankList
+      },
+      '/practice'
+    )
       .then(res => {
-        if (res.data && res.data.length > 0) {
+        if (res.success && res.data) {
           this.setState({
             contributionList: res.data,
             isLoading: false
@@ -58,7 +60,7 @@ class PracticeList extends Component {
    * 去练题
    */
   onChangeJump = () => {
-    window.open('/practice-questions', '_blank')
+    window.open('/practise-questions', '_blank')
   }
 
   render() {

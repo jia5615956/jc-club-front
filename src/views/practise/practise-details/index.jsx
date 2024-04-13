@@ -1,18 +1,19 @@
 import Timer from '@components/timerCom/FlipClock'
+import { getCurrentTime } from '@utils'
 import req from '@utils/request'
 import { Checkbox, Modal, Radio } from 'antd'
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import PracticeAction from './components/practice-action'
-import PracticeAdvance from './components/practice-advance'
-import PracticePaging from './components/practice-paging'
+import { useNavigate, useParams } from 'react-router-dom'
+import PracticeAction from './components/practise-action'
+import PracticeAdvance from './components/practise-advance'
+import PracticePaging from './components/practise-paging'
 import { ApiName, ImgObj, quetionsType } from './constant'
 import './index.less'
 
 const PracticeDetails = props => {
   const navigate = useNavigate()
-
+  const { setId } = useParams()
   const [isMark, setIsMark] = useState(0) // 是否标记
   const [currentActive, setCurrentActive] = useState('')
   const [subjectList, setSubjectList] = useState([])
@@ -20,13 +21,15 @@ const PracticeDetails = props => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isShowAdvanOverceBox, setIsShowAdvanOverceBox] = useState(false)
   const [isShowStopBox, setIsShowStopBox] = useState(false)
+  const [subjectInfo, setSubjectInfo] = useState({
+    practiceId: null,
+    subjectTitle: '热门题目练习',
+    singleLength: 0,
+    multipleLength: 0,
+    judgeLength: 0
+  })
 
   const timerRef = React.createRef()
-  let subjectTitle = ''
-  let singleLength = 0
-  let multipleLength = 0
-  let judgeLength = 0
-  const setId = ''
 
   const isLast = currentIndex === subjectList?.length - 1
 
@@ -35,49 +38,30 @@ const PracticeDetails = props => {
    */
   const getSubjectList = () => {
     let params = {
-      setId: setId
+      setId
     }
-    subjectTitle = '热门题目练习'
-    singleLength = 1
-    multipleLength = 1
-    judgeLength = 1
-    const list = [
+    req(
       {
-        subjectType: 1,
-        subjectId: 1,
-        active: true
+        method: 'post',
+        data: params,
+        url: ApiName.getSubjects
       },
-      {
-        subjectType: 2,
-        subjectId: 2
-      },
-      {
-        subjectType: 3,
-        subjectId: 3
-      }
-    ]
-    setSubjectList([...list])
-    // _.set(list, [0, 'active'], true)
-    getPracticeSubject(list[0], list, 0, [])
-    // req({
-    //   method: 'post',
-    //   data: params,
-    //   url: ApiName.getSubjects
-    // })
-    //   .then(res => {
-    //     if (res.data && res.data?.subjectList?.length > 0) {
-    //       let list = res.data.subjectList
-    //       singleLength =
-    //         list?.length > 0 ? list.filter(item => item.subjectType === 1).length : 0
-    //       multipleLength =
-    //         list?.length > 0 ? list.filter(item => item.subjectType === 2).length : 0
-    //       judgeLength =
-    //         list?.length > 0 ? list.filter(item => item.subjectType === 3).length : 0
-    //       subjectTitle = res.data?.title || '' // 总题目列表
-    //       getPracticeSubject(list[0], list, 0, [])
-    //     }
-    //   })
-    //   .catch(err => console.log(err))
+      '/practice'
+    )
+      .then(res => {
+        if (res.data && res.data?.subjectList?.length > 0) {
+          const { subjectList, title, practiceId } = res.data
+          setSubjectInfo({
+            practiceId,
+            subjectTitle: title,
+            singleLength: subjectList.filter(item => item.subjectType === 1).length,
+            multipleLength: subjectList.filter(item => item.subjectType === 2).length,
+            judgeLength: subjectList.filter(item => item.subjectType === 3).length
+          })
+          getPracticeSubject(subjectList[0], subjectList, 0, [])
+        }
+      })
+      .catch(err => console.log(err))
   }
 
   useEffect(() => {
@@ -98,55 +82,18 @@ const PracticeDetails = props => {
       subjectId: item.subjectId,
       subjectType: item.subjectType
     }
-
-    const optionList =
-      item.subjectType === 3
-        ? [
-            {
-              optionContent: '正确',
-              optionType: 1
-            },
-            {
-              optionContent: '错误',
-              optionType: 0
-            }
-          ]
-        : [
-            {
-              optionType: 1,
-              optionContent: '<p>题目答案1</p>'
-            },
-            {
-              optionType: 2,
-              optionContent: '<p>题目答案2</p>'
-            },
-            {
-              optionType: 3,
-              optionContent: '<p>题目答案3</p>'
-            }
-          ]
-    setCurrentActive(item.subjectType === 2 ? activeList : activeList[0])
-    setCurrentIndex(index)
-    setSubjectObject({
-      subjectName: '题干内容',
-      subjectType: item.subjectType,
-      optionList,
-      // subjectList: subjectList,
-      // currentIndex: index,
-      // currentActive: item.sub??jectType === 2 ? activeList : activeList[0],
-      isMark: isMark
-    })
-
-    return
-    req({
-      method: 'post',
-      data: params,
-      url: ApiName.getPracticeSubject
-    })
+    req(
+      {
+        method: 'post',
+        data: params,
+        url: ApiName.getPracticeSubject
+      },
+      '/practice'
+    )
       .then(res => {
         if (res.data) {
           let subjectObject = res.data
-          if (item.subjectType === 3) {
+          if (subjectObject.subjectType === 3) {
             subjectObject.optionList = [
               {
                 optionContent: '正确',
@@ -158,13 +105,10 @@ const PracticeDetails = props => {
               }
             ]
           }
-          setState({
-            subjectObject: res.data,
-            subjectList: subjectList,
-            currentIndex: index,
-            currentActive: item.subjectType === 2 ? activeList : activeList[0],
-            isMark: isMark
-          })
+          setCurrentActive(subjectObject.subjectType === 2 ? activeList : activeList[0])
+          setCurrentIndex(index)
+          setSubjectObject({ ...subjectObject, isMark })
+          setSubjectList(subjectList)
         }
       })
       .catch(err => console.log(err))
@@ -188,7 +132,6 @@ const PracticeDetails = props => {
    * @returns
    */
   const onChangeCheck = e => {
-    // let { currentIndex, subjectList } = state
     const list = [...subjectList]
     _.set(list, [currentIndex, 'activeList'], e)
     setCurrentActive(e)
@@ -199,7 +142,6 @@ const PracticeDetails = props => {
    * 暂停计时
    */
   const onChangeStop = () => {
-    // setState({ isShowStopBox: true })
     setIsShowStopBox(true)
     timerRef.current.stop()
   }
@@ -237,43 +179,28 @@ const PracticeDetails = props => {
    */
   const onChangeOver = () => {
     timerRef.current.end()
-    navigate('/practice-analytic/1', { replace: true })
-    // const list = [...subjectList]
-    // let answerDetails = []
-    // list.forEach(item => {
-    //   let obj = {
-    //     subjectId: item.subjectId,
-    //     subjectType: item.subjectType,
-    //     answerContents: []
-    //   }
-    //   if (item?.activeList && item?.activeList?.length > 0) {
-    //     obj.answerContents = item.activeList
-    //   }
-    //   answerDetails.push(obj)
-    // })
-    // let params = {
-    //   setId: setId,
-    //   timeUse: timerRef.current.getUseTime(),
-    //   submitTime: getCurrentTime(),
-    //   answerDetails: answerDetails
-    // }
-    // req({
-    //   method: 'post',
-    //   data: params,
-    //   url: ApiName.submitSubject
-    // })
-    //   .then(res => {
-    //     if (res.data && res.data.practiceId) {
-    //       //关闭定时器
-    //       timerRef.current.end()
-    //       props.history.replace(
-    //         splicingQuery('/practice-analytic', {
-    //           practiceId: res.data.practiceId
-    //         })
-    //       )
-    //     }
-    //   })
-    //   .catch(err => console.log(err))
+    let params = {
+      setId,
+      practiceId: subjectInfo.practiceId,
+      timeUse: timerRef.current.getUseTime(),
+      submitTime: getCurrentTime()
+    }
+    req(
+      {
+        method: 'post',
+        data: params,
+        url: ApiName.submit
+      },
+      '/practice'
+    )
+      .then(res => {
+        if (res.success) {
+          //关闭定时器
+          timerRef.current.end()
+          navigate('/practise-analytic/' + subjectInfo.practiceId, { replace: true })
+        }
+      })
+      .catch(err => console.log(err))
   }
 
   /**
@@ -288,8 +215,6 @@ const PracticeDetails = props => {
    */
   const onHandleCancelModal = () => {
     setIsShowAdvanOverceBox(false)
-
-    // setState({ isShowAdvanOverceBox: false })
   }
 
   /**
@@ -297,9 +222,6 @@ const PracticeDetails = props => {
    */
   const onChangeAdvanceOver = () => {
     setIsShowAdvanOverceBox(true)
-    // setState({
-    //   isShowAdvanOverceBox: true
-    // })
   }
 
   /**
@@ -307,8 +229,28 @@ const PracticeDetails = props => {
    * @returns
    */
   const onChangeNext = () => {
-    // let { currentIndex } = state
-    // currentIndex += 1
+    console.log(subjectList)
+    const { subjectId, subjectType, activeList } = subjectList[currentIndex]
+
+    let params = {
+      practiceId: subjectInfo.practiceId,
+      timeUse: timerRef.current.getUseTime(),
+      subjectId: subjectId,
+      subjectType: subjectType,
+      answerContents: activeList
+    }
+    req(
+      {
+        method: 'post',
+        data: params,
+        url: ApiName.submitSubject
+      },
+      '/practice'
+    )
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => console.log(err))
     setCurrentIndex(currentIndex + 1)
     changeData(currentIndex + 1)
   }
@@ -318,7 +260,6 @@ const PracticeDetails = props => {
    * @param {*} index 当前点击下标
    */
   const changeData = index => {
-    // let { subjectList } = state
     const list = [...subjectList]
     let subObj = list[index]
     let activeList = [] // 多选 选中的答案项
@@ -349,14 +290,12 @@ const PracticeDetails = props => {
   const onChangeSubmitModal = () => {
     timerRef.current.run()
     setIsShowStopBox(false)
-    // setState({ isShowStopBox: false })
   }
 
   /**
    * 暂停弹框-再次再做
    */
   const onChangeCancelModal = () => {
-    // props.history.goBack()
     navigate(-1)
   }
 
@@ -367,7 +306,7 @@ const PracticeDetails = props => {
     <div className='details-container'>
       <div className='container-box'>
         <div className='container-box-title'>
-          <div className='title-title'>{subjectTitle}</div>
+          <div className='title-title'>{subjectInfo.subjectTitle}</div>
           <div className='title-time'>
             <div className='title-timer-img' onClick={onChangeStop}>
               <img src={isShowStopBox ? ImgObj.stop : ImgObj.run} className='title-timer-icon' />
@@ -453,9 +392,9 @@ const PracticeDetails = props => {
         <PracticePaging
           subjectList={subjectList}
           onHandlePaging={onChangePaging}
-          singleLength={singleLength}
-          multipleLength={multipleLength}
-          judgeLength={judgeLength}
+          singleLength={subjectInfo.singleLength}
+          multipleLength={subjectInfo.multipleLength}
+          judgeLength={subjectInfo.judgeLength}
         />
       </div>
       <PracticeAdvance
