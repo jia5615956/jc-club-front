@@ -1,25 +1,23 @@
 // import req from '@utils/request'
 import req from '@utils/request'
-import { Card, Empty, Input, Pagination, Spin, Tooltip } from 'antd'
+import { Card, Empty, Pagination, Spin, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './index.less'
 
-const { Search } = Input
-
 const tabList = [
   {
-    key: '0',
+    key: '1',
     tab: '默认'
+  },
+  {
+    key: '2',
+    tab: '最新'
+  },
+  {
+    key: '3',
+    tab: '最热'
   }
-  // {
-  //   key: '1',
-  //   tab: '最新'
-  // },
-  // {
-  //   key: '2',
-  //   tab: '最热'
-  // }
 ]
 
 const PaperView = props => {
@@ -28,16 +26,14 @@ const PaperView = props => {
 
   const [spinning, setSpinning] = useState(false)
   const [paperList, setPaperList] = useState([])
-  const [orderType, setOrderType] = useState(0)
+  const [orderType, setOrderType] = useState('1')
   const [pageInfo, setPageInfo] = useState({
     total: 0,
     pageIndex: 1
   })
-  const [searchText, setSearchText] = useState('')
-
   useEffect(() => {
     getPreSetContent()
-  }, [props.type])
+  }, [type, orderType])
 
   const getPreSetContent = () => {
     let api = '/practice/set/getPreSetContent'
@@ -49,6 +45,9 @@ const PaperView = props => {
         pageNo: pageInfo.pageIndex,
         pageSize: 8
       }
+    }
+    if (type !== 'unfinish') {
+      params.orderType = orderType
     }
     req(
       {
@@ -65,6 +64,8 @@ const PaperView = props => {
             total: res.data.total
           })
           setPaperList(res.data.result || [])
+        } else {
+          setPaperList([])
         }
       })
       .catch(err => console.log(err))
@@ -83,29 +84,21 @@ const PaperView = props => {
 
   const handleJump = setId => navigate('/practise-detail/' + setId)
 
-  const onSearch = value => {
-    setSearchText(value)
-  }
-
   return (
     <Spin spinning={spinning}>
-      {/* <div className='paper-box-search'>
-        <Search
-          placeholder='请输入试卷名'
-          onSearch={onSearch}
-          style={{ width: 300, borderRadius: '10px' }}
-        />
-      </div> */}
       <div className='paper-box'>
         <div className='paper-box-cardlist'>
           <Card
             style={{ width: '100%' }}
-            tabList={tabList}
+            tabList={type === 'unfinish' ? null : tabList}
             bordered={false}
             activeTabKey={tabList.key}
             onTabChange={onTabChange}
           >
-            <div className='ant-card-body'>
+            <div
+              className='ant-card-body-box'
+              style={{ justifyContent: paperList?.length ? 'flex-start' : 'center' }}
+            >
               {paperList?.length > 0 ? (
                 paperList.map((item, index) => {
                   return (

@@ -25,11 +25,7 @@ function getItem(
 const PracticeQuestions = () => {
   const [selectKeys, setSelectKeys] = useState(['1'])
 
-  const menuItems = [
-    getItem('专项练习', '1'),
-    getItem('模拟套卷', '2', '', [getItem('后端', '2-1'), getItem('前端', '2-2')]),
-    getItem('我未完成', '3')
-  ]
+  const menuItems = [getItem('专项练习', '1'), getItem('模拟套卷', '2'), getItem('我未完成', '3')]
 
   const clickMenu = ({ key }: { key: string }) => {
     setSelectKeys([key])
@@ -38,9 +34,8 @@ const PracticeQuestions = () => {
   const renderPage = () => {
     const pageMap = {
       '1': <FrontEnd />,
-      '2-1': <PaperEnd type='backend' />,
-      '2-2': <PaperEnd />,
-      '3': <PaperEnd type='unfinish' />
+      '2': <PaperEnd type='backend' key='backend' />,
+      '3': <PaperEnd type='unfinish' key='unfinish' />
     }
     return pageMap[selectKeys[0]]
   }

@@ -27,30 +27,15 @@ export default function RankingBox(props) {
     } else {
       message.info('敬请期待')
     }
-    // props.onHandleJump && props.onHandleJump()
   })
-  const tabList =
-    rankingType === 2
-      ? [
-          {
-            tab: '本月排行',
-            key: 'month'
-          },
-          {
-            tab: '总榜',
-            key: 'total'
-          }
-        ]
-      : [
-          {
-            tab: '总榜',
-            key: 'total'
-          }
-        ]
+  const tabList = [
+    {
+      tab: '总榜',
+      key: 'total'
+    }
+  ]
   // 获得当前下标的数据
   let rankingList = contributionList || []
-
-  console.log(rankingList, 'rank list ')
 
   return (
     <div className='ranking-list-box'>
