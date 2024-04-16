@@ -20,7 +20,7 @@ const MENULIST = [
     key: 'practiceQuestions',
     title: '鸡圈',
     route: '/jichi-club',
-    finished: false
+    finished: true
   },
   {
     key: 'interList',

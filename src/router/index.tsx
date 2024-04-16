@@ -50,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: 'practise-analytic/:id',
         Component: lazy(() => import('@views/practise/practise-analytic'))
+      },
+      {
+        path: 'jichi-club',
+        Component: lazy(() => import('@views/chicken-circle'))
       }
     ]
   }

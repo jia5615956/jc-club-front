@@ -63,7 +63,7 @@ export default function RankingBox(props) {
           {rankingList?.length > 0 &&
             rankingList.map((item, index) => {
               return (
-                <div className='ranking-item' key={item.id}>
+                <div className='ranking-item' key={index}>
                   <div className='ranking-left'>
                     <div
                       className='ranking-icon'
@@ -74,24 +74,27 @@ export default function RankingBox(props) {
                       {index > 2 && index + 1}
                     </div>
                     <div className='ranking-head-img'>
-                      <img src={item.createUserAvatar} className='ranking-head-icon' />
+                      <img
+                        src={item.createUserAvatar || item.avatar}
+                        className='ranking-head-icon'
+                      />
                     </div>
                     <Popover
                       title={<div>{item.createUser}</div>}
                       content={
                         <div className='tooltip-info'>
-                          <div>{item.createUser}</div>
+                          <div>{item.createUser || item.name}</div>
                           {/* <div>{item.organizationFullName}</div> */}
                         </div>
                       }
                     >
                       <div className='ranking-info'>
-                        <div className='ranking-name'>{item.createUser}</div>
+                        <div className='ranking-name'>{item.createUser || item.name}</div>
                         {/* <div className="ranking-department">{item.organizationName}</div> */}
                       </div>
                     </Popover>
                   </div>
-                  <div className='ranking-right'>🔥 {item.subjectCount}</div>
+                  <div className='ranking-right'>🔥 {item.subjectCount || item.count}</div>
                 </div>
               )
             })}

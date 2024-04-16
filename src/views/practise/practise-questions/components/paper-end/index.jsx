@@ -7,15 +7,15 @@ import './index.less'
 
 const tabList = [
   {
-    key: '1',
+    key: '0',
     tab: '默认'
   },
   {
-    key: '2',
+    key: '1',
     tab: '最新'
   },
   {
-    key: '3',
+    key: '2',
     tab: '最热'
   }
 ]
@@ -26,7 +26,7 @@ const PaperView = props => {
 
   const [spinning, setSpinning] = useState(false)
   const [paperList, setPaperList] = useState([])
-  const [orderType, setOrderType] = useState('1')
+  const [orderType, setOrderType] = useState('0')
   const [pageInfo, setPageInfo] = useState({
     total: 0,
     pageIndex: 1
@@ -107,15 +107,26 @@ const PaperView = props => {
                       onClick={() => handleJump(item.setId)}
                       key={`paperList_${index}`}
                     >
-                      <h1 className='paper-box-cardlist-body-item-title'>{item.setName}</h1>
-                      <div className='paper-box-cardlist-body-item-hot'>
-                        热度指数：{item.setHeat}
-                      </div>
-                      <div className='paper-box-cardlist-body-item-describe'>
-                        <Tooltip placement='topLeft' title={item.setDesc}>
-                          <span className='hide-3-line'>{item.setDesc}</span>
-                        </Tooltip>
-                      </div>
+                      <h1 className='paper-box-cardlist-body-item-title'>
+                        {item.setName || item.title}
+                      </h1>
+                      {type === 'unfinish' ? (
+                        <div className='paper-box-cardlist-body-item-hot'>
+                          <div>上次练习时间</div>
+                          {item.practiceTime}
+                        </div>
+                      ) : (
+                        <>
+                          <div className='paper-box-cardlist-body-item-hot'>
+                            热度指数：{item.setHeat}
+                          </div>
+                          <div className='paper-box-cardlist-body-item-describe'>
+                            <Tooltip placement='topLeft' title={item.setDesc}>
+                              <span className='hide-3-line'>{item.setDesc}</span>
+                            </Tooltip>
+                          </div>
+                        </>
+                      )}
                     </div>
                   )
                 })
